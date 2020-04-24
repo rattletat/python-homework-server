@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Programmieren für Sozialwissenschaftler*innen</title>
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/base.css" %}">
+  </head>
+
+  <body>
+    <div class="nav">
+      <h1>
+        <a href="">Programmieren für Sozialwissenschaftler*innen<a>
+        <br>
+        <small class="text-muted">
+          {% block sub_header_text %}{% endblock %}
+        </small>
+      </h1>
+    </div>
+
+    <div class="container">
+      <div class="jumbotron">
+        {% block jumbotron_text %}{% endblock %}
+      </div>
+
+      {% block pre_table_info %}{% endblock %}
+
+      <table class="table table-hover" id="id_exercises">
+        <thead>
+          {% block table_head %}{% endblock %}
+        </thead>
+        <tbody>
+          {% block table %}{% endblock %}
+        </tbody>
+      </table>
+
+      {% block post_table_info %}{% endblock %}
+    </div>
+  </body>
+</html>

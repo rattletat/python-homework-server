@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block sub_header_text %}Programmieraufgabe {{ exercise.number }}{% endblock %}
+
+
+
+{% block table %}
+                <tr>
+                    <td>Status:</td>
+                    <td>Aktiv</td>
+                </tr>
+                <tr>
+                    <td>Deadline:</td>
+                    <td>01.05.2020</td>
+                </tr>
+                <tr>
+                    <td>Beschreibung:</td>
+                    <td>In diesem ersten Projekt müsst ihr ein simples Hello World Programm schreiben. Dazu ladet ihr die unterstehenden Dateien herunter und öffnet SIe mit PyCharm. Danach müsst ihr nur noch die markierten Stellen richtig ausführen und die Datei hier wieder hochladen.</td>
+                </tr>
+{% endblock %}
+
+{% block post_table_info %}
+<a id="id_current_exercise" href="/">Zur Abgabe</a>
+{% endblock %}
