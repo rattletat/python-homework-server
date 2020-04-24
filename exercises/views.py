@@ -9,4 +9,5 @@ def home_page(request):
 
 def view_exercise(request, exercise_number):
     exercise = Exercise.objects.get(number=exercise_number)
+    test.error()
     return render(request, "exercise.html", {"exercise": exercise})
