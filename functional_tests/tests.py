@@ -3,13 +3,17 @@ import os
 from django.test import LiveServerTestCase
 from django.utils.timezone import now, timedelta
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+
 
 from exercises.models import Exercise
 
 
 class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        options = Options()
+        options.headless = True
+        self.browser = webdriver.Firefox(options=options)
         staging_server = os.environ.get("STAGING_SERVER")
         if staging_server:
             self.live_server_url = 'http://' + staging_server
