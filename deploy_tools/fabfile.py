@@ -1,8 +1,10 @@
 import random
 from fabric.contrib.files import append, exists
-from fabric.api import cd, sudo, env, local, run
+from fabric.api import cd, env, local, run
+env.use_ssh_config = True
 
 REPO_URL = 'https://github.com/rattletat/homework-server.git'
+
 
 def deploy():
     site_folder = f'/home/{env.user}/sites/{env.host}'
@@ -25,13 +27,10 @@ def _get_latest_source():
 
 
 def _update_virtualenv():
-    poetry_installed = run("poetry about").failed
-    if not poetry_installed:
+    poetry_failed = run("poetry about").failed
+    if poetry_failed:
         run("curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python")
         run('source $HOME/.poetry/env')
-        sudo("apt get install python3.8 -y")
-        sudo("apt get install python3-pip -y")
-        sudo("apt get install python3.8-venv -y")
     if not exists('pyproject.toml'):
         run(f'poetry new . -n --src --name {env.host}')
     run('poetry install')
