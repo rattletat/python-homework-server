@@ -4,6 +4,7 @@ from django.test import LiveServerTestCase
 from django.utils.timezone import now, timedelta
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from django.conf import settings
 
 
 from exercises.models import Exercise
@@ -12,7 +13,7 @@ from exercises.models import Exercise
 class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         options = Options()
-        options.headless = False
+        options.headless = True
         self.browser = webdriver.Firefox(options=options)
         staging_server = os.environ.get("STAGING_SERVER")
         if staging_server:
@@ -54,10 +55,8 @@ class NewVisitorTest(LiveServerTestCase):
         # and a future programming exercise.
         table = self.browser.find_element_by_id('id_exercises')
         rows = table.find_elements_by_tag_name('tr')
-        import time
-        time.sleep(10)
-        print(list(rows))
-        print(Exercise.objects.all())
+        print(settings.DEBUG)
+        print(settings.STATIC_ROOT)
         self.assertGreaterEqual(len(rows), 3)
 
         # She presses on the link of the active exercise.
