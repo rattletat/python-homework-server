@@ -12,7 +12,7 @@ from exercises.models import Exercise
 class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         options = Options()
-        options.headless = True
+        options.headless = False
         self.browser = webdriver.Firefox(options=options)
         staging_server = os.environ.get("STAGING_SERVER")
         if staging_server:
@@ -54,6 +54,10 @@ class NewVisitorTest(LiveServerTestCase):
         # and a future programming exercise.
         table = self.browser.find_element_by_id('id_exercises')
         rows = table.find_elements_by_tag_name('tr')
+        import time
+        time.sleep(10)
+        print(list(rows))
+        print(Exercise.objects.all())
         self.assertGreaterEqual(len(rows), 3)
 
         # She presses on the link of the active exercise.
