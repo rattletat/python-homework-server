@@ -6,6 +6,7 @@ class Exercise(models.Model):
     number = models.PositiveSmallIntegerField(primary_key=True, default=None)
     release = models.DateTimeField(null=True, default=None)
     deadline = models.DateTimeField(null=True, default=None)
+    description = models.TextField(null=True)
 
     def is_started(self):
         if self.release:
@@ -13,7 +14,7 @@ class Exercise(models.Model):
         else:
             return True
 
-    def is_finished(self):
+    def is_expired(self):
         if self.deadline:
             return self.deadline < now()
         else:

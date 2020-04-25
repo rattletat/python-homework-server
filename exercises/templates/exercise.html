@@ -5,20 +5,25 @@
 
 
 {% block table %}
-                <tr>
+                <tr id="status">
                     <td>Status:</td>
-                    <td>Aktiv</td>
+                  {% if exercise.is_expired }}
+                    <td>Abgabe beendet!</td>
+                  {% elif exercise.is_started }}
+                    <td>Zur Abgabe bereit!</td>
+                  {% else }}
+                    <td>Nicht veröffentlicht!</td>
+                  {% endif }}
                 </tr>
-                <tr>
+                <tr id="deadline">
                     <td>Deadline:</td>
-                    <td>01.05.2020</td>
+                    <td>{{ exercise.deadline }}</td>
                 </tr>
-                <tr>
+                <tr id="description">
                     <td>Beschreibung:</td>
-                    <td>In diesem ersten Projekt müsst ihr ein simples Hello World Programm schreiben. Dazu ladet ihr die unterstehenden Dateien herunter und öffnet SIe mit PyCharm. Danach müsst ihr nur noch die markierten Stellen richtig ausführen und die Datei hier wieder hochladen.</td>
+                    <td>{{ exercise.description }}</td>
                 </tr>
 {% endblock %}
 
 {% block post_table_info %}
-<a id="id_current_exercise" href="/">Zur Abgabe</a>
 {% endblock %}

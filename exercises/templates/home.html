@@ -32,8 +32,8 @@
 
 {% block table %}
 {% for exercise in exercises %}
-    {% if exercise.is_finished %}
-        <tr class="table-default" align="center" id_"id_finished_exercise">
+    {% if exercise.is_expired %}
+        <tr class="table-default" align="center" id_"id_expired_exercise">
             <th scope="row">{{ exercise.number }}</th>
             <td>{{ exercise.start_date }}</td>
             <td>{{ exercise.deadline }}</td>
@@ -43,7 +43,7 @@
             </td>
         </tr>
     {% elif exercise.is_started %}
-        <tr class="table-primary" align="center" id="id_active_exercise">
+        <tr class="table-primary" align="center" id="active_exercise">
             <th scope="row">{{ exercise.number }}</th>
             <td>{{ exercise.start_date }}</td>
             <td>{{ exercise.deadline }}</td>
