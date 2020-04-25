@@ -16,6 +16,7 @@ def deploy(domain):
         _create_or_update_dotenv(domain)
         _update_static_files()
         _update_database()
+        _restart_gunicorn(domain)
 
 
 def _get_latest_source():
@@ -55,3 +56,7 @@ def _update_static_files():
 
 def _update_database():
     run("poetry run python3.8 manage.py migrate --noinput")
+
+
+def _restart_gunicorn(domain):
+    sudo(f"systemctl restart gunicorn-{domain}.service")
