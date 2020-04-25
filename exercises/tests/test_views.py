@@ -31,8 +31,12 @@ class HomePageTest(TestCase):
 
         self.assertContains(response, "Keine Programmieraufgaben!")
 
-    def test_one_exercise_subheader(self):
+    def test_no_exercise_table_not_shown(self):
+        response = self.client.get("/")
 
+        self.assertNotContains(response, 'id="table-header"')
+
+    def test_one_exercise_subheader(self):
         Exercise.objects.create(number=1)
 
         response = self.client.get("/")
