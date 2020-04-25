@@ -13,7 +13,6 @@ MAX_WAIT = 10
 
 
 class FunctionalTest(LiveServerTestCase):
-
     def setUp(self):
         # Database setup
         self.setup_database()
@@ -26,7 +25,7 @@ class FunctionalTest(LiveServerTestCase):
         # Live test
         staging_server = os.environ.get("STAGING_SERVER")
         if staging_server:
-            self.live_server_url = 'http://' + staging_server
+            self.live_server_url = "http://" + staging_server
 
     def tearDown(self):
         self.browser.quit()
@@ -47,19 +46,19 @@ class FunctionalTest(LiveServerTestCase):
             number=1,
             release=now() - timedelta(days=10),
             deadline=now() - timedelta(days=3),
-            description="Please print `Hello World` to standard output."
+            description="Please print `Hello World` to standard output.",
         )
         # Current exercise
         Exercise.objects.create(
             number=2,
             release=now() - timedelta(days=3),
             deadline=now() + timedelta(days=4),
-            description="Please construct a simple for-loop."
+            description="Please construct a simple for-loop.",
         )
         # Future exercise
         Exercise.objects.create(
             number=3,
             release=now() + timedelta(days=4),
             deadline=now() + timedelta(days=11),
-            description="Please code a recursive metaclass-based polymorphic tree parser factory."
+            description="Please code a recursive metaclass-based polymorphic tree parser factory.",
         )
