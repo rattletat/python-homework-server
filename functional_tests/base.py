@@ -1,11 +1,15 @@
 import os
+import time
 
 from django.test import LiveServerTestCase
 from django.utils.timezone import now, timedelta
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox.options import Options
 
 from exercises.models import Exercise
+
+MAX_WAIT = 10
 
 
 class FunctionalTest(LiveServerTestCase):
@@ -26,6 +30,16 @@ class FunctionalTest(LiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+    def wait_for(self, fn):
+        start_time = time.time()
+        while True:
+            try:
+                return fn()
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
 
     def setup_database(self):
         # Past exercise

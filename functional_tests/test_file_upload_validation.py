@@ -1,4 +1,3 @@
-import time
 from unittest import skip
 
 from .base import FunctionalTest
@@ -17,11 +16,23 @@ class UploadValidationTest(FunctionalTest):
         url = active_row.find_element_by_tag_name("a").get_attribute('href')
         self.browser.get(url)
 
-        # She sees the submission button and uploads a Python file.
+        # She sees the submission button and uploads a wrong Python file.
         upload_button = self.browser.find_element_by_id('submission')
-        upload_button.send_keys('/functional_tests/rsc/homework_1.py')
+        upload_button.send_keys('functional_tests/rsc/wrong_homework.py')
 
         # After a few seconds, she sees the score printed.
-        time.sleep(5)
-        score = self.browser.find_element_by_id('score')
-        self.assertIn('100%', score.text)
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_element_by_id('score').text, '50%'
+            ))
+
+        # She is shocked by the result and accidentally uploads an image
+        upload_button.send_keys('functional_tests/rsc/cat.png')
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_element_by_css_selector('.has-error').text, '0%'
+            ))
+
+        # She notices her mistake and uploads the correct file
+        upload_button.send_keys('functional_tests/rsc/correct_homework.png')
+        self.wait_for(lambda: self.assertEqual(
+            self.browser.find_element_by_id('score').text, '100%'
+            ))
