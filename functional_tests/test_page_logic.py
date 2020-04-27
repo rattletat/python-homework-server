@@ -19,23 +19,20 @@ class NewVisitorTest(FunctionalTest):
         rows = table.find_elements_by_tag_name("tr")
         self.assertGreaterEqual(len(rows), 3)
 
-        # She presses on the link of the active exercise.
+        # She presses on the second link.
         # The page updates and now sees the lecture name in the header
         # and the exercise name in the subheader.
-        active_row = table.find_element_by_id("active_exercise")
-        link = active_row.find_element_by_tag_name("a")
-        self.browser.get(link.get_attribute("href"))
-        header = self.browser.find_element_by_css_selector(".nav h1 a").text
-        subheader = self.browser.find_element_by_css_selector(".jumbotron h2").text
-        self.assertIn(title, header)
-        self.assertIn("Programmieraufgabe 2", subheader)
+        link = self.find_exercise_link(2)
+        self.browser.get(link)
+        self.assertIn(title, self.find_title().text)
+        self.assertIn("Programmieraufgabe 2", self.find_subtitle().text)
 
         # She sees that the assignment is open for submission
-        status = self.browser.find_element_by_id("status").text
+        status = self.find_exercise_status.text
         self.assertIn("Zur Abgabe bereit!", status)
 
         # She reads the well written description.
-        description = self.browser.find_element_by_id("description").text
+        description = self.get_exercise_description
         self.assertIn("for-loop", description)
         self.assertNotIn("Hello World", description)
 

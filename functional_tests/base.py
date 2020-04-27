@@ -6,6 +6,7 @@ from django.utils.timezone import now, timedelta
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.firefox.options import Options
+from django.conf import settings
 
 from exercises.models import Exercise
 
@@ -62,3 +63,27 @@ class FunctionalTest(LiveServerTestCase):
             deadline=now() + timedelta(days=11),
             description="Please code a recursive metaclass-based polymorphic tree parser factory.",
         )
+
+    # General helper
+    def get_title(self):
+        return self.browser.find_element_by_css_selector(".nav h1 a")
+
+    def get_subtitle(self):
+        return self.browser.find_element_by_css_selector(".jumbotron h2")
+
+    def get_fixture(self, fixture):
+        return os.path.join(settings.BASE_DIR, 'functional_tests/fixtures', fixture)
+
+    # Homepage view helper
+    def get_exercise_link(self, number):
+        return self.browser.find_element_by_id(f"id_exercise_{number}").get_attribute("href")
+
+    # Exercise view helper
+    def get_upload_button(self):
+        return self.browser.find_element_by_id('id_file')
+
+    def get_exercise_status(self):
+        return self.browser.find_element_by_id("id_status")
+
+    def get_exercise_description(self):
+        return self.browser.find_element_by_id("id_description")

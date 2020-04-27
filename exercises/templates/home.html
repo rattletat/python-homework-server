@@ -37,18 +37,18 @@
           <th scope="row">{{ exercise.number }}</th>
           <td>{{ exercise.start_date }}</td>
           <td>{{ exercise.deadline }}</td>
-          <td><a href="{% url 'exercise:view_exercise' exercise.number %}">
+          <td><a href="{% url 'exercise:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
                   <button type="button" class="btn btn-outline-primary btn-sm">Zur Aufgabe</button>
               </a>
           </td>
       </tr>
     {% elif exercise.released %}
-      <tr class="table-primary" align="center" id="active_exercise">
+      <tr class="table-primary" align="center" id="id_active_exercise">
           <th scope="row">{{ exercise.number }}</th>
           <td>{{ exercise.start_date }}</td>
           <td>{{ exercise.deadline }}</td>
-          <td><a href="{% url 'exercise:view_exercise' exercise.number %}">
-                  <button type="button" class="btn btn-primary btn-sm">Zur Aufgabe</button>
+          <td><a href="{% url 'exercise:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
+              <button type="button" class="btn btn-primary btn-sm">Zur Aufgabe</button>
               </a>
           </td>
       </tr>
