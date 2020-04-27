@@ -4,31 +4,33 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scaie=1, shrink-to-fit=no" />
-    <title>Programmieren für Sozialwissenschaftler*innen</title>
-    <link rel="stylesheet" type="text/css" href="{% static "exercises/bootstrap/css/bootstrap.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "exercises/base.css" %}">
+    <title>Programmieren fuer Sozialwissenschaftler*innen</title>
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/code.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/base.css" %}">
   </head>
 
   <body>
     <div class="nav">
       <h1>
-        <a href="">Programmieren für Sozialwissenschaftler*innen<a>
-        <br>
-        <small class="text-muted">
-          {% block sub_header_text %}{% endblock %}
-        </small>
+        <a style = "font-family:LibreBarcode;" href="/">Programmieren fuer Sozialwissenschaftler*innen<a>
       </h1>
     </div>
 
+    {% block statusbar %}{% endblock %}
+
     <div class="container">
       <div class="jumbotron">
+        <h2>
+          {% block sub_header_text %}{% endblock %}
+        </h2>
         {% block jumbotron_text %}{% endblock %}
       </div>
 
       {% block pre_table_info %}{% endblock %}
 
-      <table class="table table-hover" id="exercises">
-        <thead>
+      <table class="table table- over" id="exercises">
+        <thead class="thead-dark">
           {% block table_head %}{% endblock %}
         </thead>
         <tbody>
