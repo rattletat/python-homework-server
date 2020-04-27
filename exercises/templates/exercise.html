@@ -1,29 +1,53 @@
 {% extends 'base.html' %}
+{% load markdown_extras %}
 
 {% block sub_header_text %}Programmieraufgabe {{ exercise.number }}{% endblock %}
 
+{% block statusbar %}
+{% if form.file.errors %}
+<div class="alert alert-danger" role="alert" align="center">
+  {% for error in form.file.errors %}
+  <span class="text-danger small">{{ error }}</span>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
 
+{% block jumbotron_text %}
+<span id="description">
+{{ exercise.description | markdown | safe }}
+</span>
+{% endblock %}
 
 {% block table %}
-                <tr id="status">
-                    <td>Status:</td>
-                  {% if exercise.is_expired }}
-                    <td>Abgabe beendet!</td>
-                  {% elif exercise.is_started }}
-                    <td>Zur Abgabe bereit!</td>
-                  {% else }}
-                    <td>Nicht veröffentlicht!</td>
-                  {% endif }}
-                </tr>
-                <tr id="deadline">
-                    <td>Deadline:</td>
-                    <td>{{ exercise.deadline }}</td>
-                </tr>
-                <tr id="description">
-                    <td>Beschreibung:</td>
-                    <td>{{ exercise.description }}</td>
-                </tr>
+  <tr id="status">
+      <td>Status:</td>
+    {% if exercise.expired %}
+      <td>Abgabe beendet!</td>
+    {% elif exercise.released %}
+      <td>Zur Abgabe bereit!</td>
+    {% else %}
+      <td>Nicht veröffentlicht!</td>
+    {% endif %}
+  </tr>
+  <tr id="deadline">
+      <td>Deadline:</td>
+      <td>{{ exercise.deadline }}</td>
+  </tr>
 {% endblock %}
 
 {% block post_table_info %}
+<form action="{% url 'exercise:view_exercise' exercise.number %}" method="POST" enctype="multipart/form-data" align="center">
+  {% csrf_token %}
+  <div class="form-group file">
+  <span class="alert alert-secondary" role="alert">
+    <label class="control-label">Hier die Datei auswählen: </label>
+      {{ form.file }}
+  </span>
+  </div>
+  <div class="form-group">
+    <br>
+    <button  type="submit" class="btn btn-success">Abschicken</button>
+  </div>
+</form>
 {% endblock %}
