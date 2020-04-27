@@ -1,8 +1,6 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from exercises.models import Exercise
-
-# from exercises.forms import UploadFileForm
+from django.shortcuts import render, redirect
+from exercises.models import Exercise, Submission
+from exercises.forms import SubmissionForm
 
 
 def home_page(request):
@@ -10,20 +8,27 @@ def home_page(request):
     return render(request, "home.html", {"exercises": exercises})
 
 
-def view_exercise(request, exercise_number):
-    exercise = Exercise.objects.get(number=exercise_number)
-    if exercise.is_started():
-        return render(request, "exercise.html", {"exercise": exercise})
-    else:
-        return home_page(request)
+def view_exercise(request, number):
+    try:
+        exercise = Exercise.objects.get(number=number)
+    except Exercise.DoesNotExist:
+        return redirect(home_page)
 
+    if not exercise.released():
+        return redirect(home_page)
 
-# def upload_file(request):
-#     if request.method == 'POST':
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             result = handle_uploaded_file(request.FILES['file'])
-#             return HttpResponseRedirect('')
-#     else:
-#         form = UploadFileForm()
-#     return render(request, 'exercise.html', {'form': form})
+    submission = Submission(exercise=exercise)
+
+    if request.method == "GET":
+        form = SubmissionForm(instance=submission)
+
+    if request.method == "POST":
+        form = SubmissionForm(request.POST, request.FILES, instance=submission)
+
+        if form.is_valid():
+            form.save()
+            return redirect(exercise)
+
+    # Exercise.objects.create(number=5, description="""
+    context = {"exercise": exercise, "form": form}
+    return render(request, "exercise.html", context)
