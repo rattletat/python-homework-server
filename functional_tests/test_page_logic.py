@@ -8,8 +8,8 @@ class NewVisitorTest(FunctionalTest):
         self.browser.get(self.live_server_url)
 
         # She notices the page title and header mention the course title.
-        title = "Programmieren für Sozialwissenschaftler*innen"
-        self.assertIn(title, self.browser.title)
+        title = "Programmieren fuer Sozialwissenschaftler*innen"
+        self.assertEqual(title, self.browser.title)
         header_text = self.browser.find_element_by_css_selector(".nav h1 a").text
         self.assertIn(title, header_text)
 
@@ -26,7 +26,7 @@ class NewVisitorTest(FunctionalTest):
         link = active_row.find_element_by_tag_name("a")
         self.browser.get(link.get_attribute("href"))
         header = self.browser.find_element_by_css_selector(".nav h1 a").text
-        subheader = self.browser.find_element_by_css_selector(".nav h1 small").text
+        subheader = self.browser.find_element_by_css_selector(".jumbotron h2").text
         self.assertIn(title, header)
         self.assertIn("Programmieraufgabe 2", subheader)
 
@@ -38,3 +38,9 @@ class NewVisitorTest(FunctionalTest):
         description = self.browser.find_element_by_id("description").text
         self.assertIn("for-loop", description)
         self.assertNotIn("Hello World", description)
+
+        # She navigates back to the home page by pressing on the header
+        # and sees the exercises again
+        header_link = self.browser.find_element_by_css_selector(".nav h1 a")
+        self.browser.get(header_link.get_attribute('href'))
+        table = self.browser.find_element_by_id("exercises")

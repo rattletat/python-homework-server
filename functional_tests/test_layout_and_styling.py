@@ -14,11 +14,12 @@ class LayoutAndStylingTest(FunctionalTest):
         )
 
         # She visits the first exercise and sees that the description is
-        # centered there too
-        active_row = table.find_element_by_id("active_exercise")
+        # centered.
         url = active_row.find_element_by_tag_name("a").get_attribute("href")
         self.browser.get(url)
-        description = self.browser.find_element_by_id("description")
         self.assertAlmostEqual(
             description.location["x"] + description.size["width"] / 2, 512, delta=10
         )
+
+        # She also notices that it is rendered as nice markdown.
+        # centered.
