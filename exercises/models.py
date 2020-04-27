@@ -11,7 +11,7 @@ FILE_MAX_SIZE = 1000
 def _user_directory_path(obj, _):
     if isinstance(obj, Submission):
         timestamp = obj.uploaded.strftime('%d-%m-%Y_%H-%M-%S')
-        return f"submission/test_user/{obj.exercise.number}/{timestamp}"
+        return f"submission/test_user/{obj.exercise.number}/{timestamp}.py"
     elif isinstance(obj, Exercise):
         return f"exercise/{obj.exercise.number}/description.md"
 

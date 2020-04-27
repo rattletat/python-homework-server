@@ -36,52 +36,48 @@ class SubmissionFormTest(TestCase):
 
     def test_can_not_save_submission_without_file(self):
         exercise = Exercise.objects.create(number=1)
-        submission = Submission(exercise=exercise)
 
-        form = SubmissionForm(files={}, instance=submission)
+        form = SubmissionForm(files={})
 
         self.assertFalse(form.is_valid())
         with self.assertRaises(ValueError):
-            form.save()
+            form.save(exercise)
 
     def test_can_not_save_small_files(self):
         exercise = Exercise.objects.create(number=1)
-        submission = Submission(exercise=exercise)
         file = SimpleUploadedFile("test.py", str.encode("import numpy as np"))
 
-        form = SubmissionForm(files={'file': file}, instance=submission)
+        form = SubmissionForm(files={'file': file})
 
         self.assertFalse(form.is_valid())
         self.assertIn("file", form.errors.keys())
         self.assertEqual(form.errors["file"], [MIN_SIZE_ERROR])
         with self.assertRaises(ValueError):
-            form.save()
+            form.save(exercise)
 
     def test_can_not_save_wrong_extension(self):
         exercise = Exercise.objects.create(number=1)
-        submission = Submission(exercise=exercise)
         file = SimpleUploadedFile("cat.png", str.encode(PYTHON_MOCK))
 
-        form = SubmissionForm(files={'file': file}, instance=submission)
+        form = SubmissionForm(files={'file': file})
 
         self.assertFalse(form.is_valid())
         self.assertIn("file", form.errors.keys())
         self.assertEqual(form.errors["file"], [EXTENSION_ERROR])
         with self.assertRaises(ValueError):
-            form.save()
+            form.save(exercise)
 
     def test_can_not_save_wrong_mime_types(self):
         exercise = Exercise.objects.create(number=1)
-        submission = Submission(exercise=exercise)
         file = SimpleUploadedFile("evil.py", str.encode(PDF_MOCK))
 
-        form = SubmissionForm(files={'file': file}, instance=submission)
+        form = SubmissionForm(files={'file': file})
 
         self.assertFalse(form.is_valid())
         self.assertIn("file", form.errors.keys())
         self.assertEqual(form.errors["file"], [MIME_ERROR])
         with self.assertRaises(ValueError):
-            form.save()
+            form.save(exercise)
 
 
 class FileUploadTest(TestCase):

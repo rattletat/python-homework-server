@@ -14,13 +14,13 @@
 {% endblock %}
 
 {% block jumbotron_text %}
-<span id="description">
+<span id="id_description">
 {{ exercise.description | markdown | safe }}
 </span>
 {% endblock %}
 
 {% block table %}
-  <tr id="status">
+  <tr id="id_status">
       <td>Status:</td>
     {% if exercise.expired %}
       <td>Abgabe beendet!</td>
@@ -47,7 +47,7 @@
   </div>
   <div class="form-group">
     <br>
-    <button  type="submit" class="btn btn-success">Abschicken</button>
+    <button  type="submit" class="btn btn-primary">Abschicken</button>
   </div>
 </form>
 {% endblock %}

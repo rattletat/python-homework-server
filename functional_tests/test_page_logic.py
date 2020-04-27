@@ -22,19 +22,19 @@ class NewVisitorTest(FunctionalTest):
         # She presses on the second link.
         # The page updates and now sees the lecture name in the header
         # and the exercise name in the subheader.
-        link = self.find_exercise_link(2)
+        link = self.get_exercise_link(2)
         self.browser.get(link)
-        self.assertIn(title, self.find_title().text)
-        self.assertIn("Programmieraufgabe 2", self.find_subtitle().text)
+        self.assertIn(title, self.get_title().text)
+        self.assertIn("Programmieraufgabe 2", self.get_subtitle().text)
 
         # She sees that the assignment is open for submission
-        status = self.find_exercise_status.text
+        status = self.get_status().text
         self.assertIn("Zur Abgabe bereit!", status)
 
         # She reads the well written description.
-        description = self.get_exercise_description
-        self.assertIn("for-loop", description)
-        self.assertNotIn("Hello World", description)
+        description = self.get_description()
+        self.assertIn("for-loop", description.text)
+        self.assertNotIn("Hello World", description.text)
 
         # She navigates back to the home page by pressing on the header
         # and sees the exercises again

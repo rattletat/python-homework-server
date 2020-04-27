@@ -15,8 +15,9 @@ class LayoutAndStylingTest(FunctionalTest):
 
         # She visits the first exercise and sees that the description is
         # centered.
-        url = active_row.find_element_by_tag_name("a").get_attribute("href")
-        self.browser.get(url)
+        link = self.get_exercise_link(1)
+        self.browser.get(link)
+        description = self.get_description()
         self.assertAlmostEqual(
             description.location["x"] + description.size["width"] / 2, 512, delta=10
         )

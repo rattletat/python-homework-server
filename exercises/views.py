@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from exercises.models import Exercise, Submission
+from exercises.models import Exercise
 from exercises.forms import SubmissionForm
 
 
@@ -17,18 +17,13 @@ def view_exercise(request, number):
     if not exercise.released():
         return redirect(home_page)
 
-    submission = Submission(exercise=exercise)
-
-    if request.method == "GET":
-        form = SubmissionForm(instance=submission)
-
+    form = SubmissionForm()
     if request.method == "POST":
-        form = SubmissionForm(request.POST, request.FILES, instance=submission)
+        form = SubmissionForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save()
+            form.save(exercise)
             return redirect(exercise)
 
-    # Exercise.objects.create(number=5, description="""
     context = {"exercise": exercise, "form": form}
     return render(request, "exercise.html", context)

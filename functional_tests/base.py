@@ -82,8 +82,8 @@ class FunctionalTest(LiveServerTestCase):
     def get_upload_button(self):
         return self.browser.find_element_by_id('id_file')
 
-    def get_exercise_status(self):
+    def get_status(self):
         return self.browser.find_element_by_id("id_status")
 
-    def get_exercise_description(self):
+    def get_description(self):
         return self.browser.find_element_by_id("id_description")

@@ -23,3 +23,7 @@ class SubmissionForm(forms.models.ModelForm):
                 "max_size": MAX_SIZE_ERROR,
             }
         }
+
+    def save(self, exercise):
+        self.instance.exercise = exercise
+        return super().save()
