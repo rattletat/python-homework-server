@@ -1,0 +1,91 @@
+@font-face {
+    font-family: "LibreBarcode";
+    font-style: normal;
+    font-weight: bold;
+    src: local("LibreBarcode"),
+        url("/static/exercises/fonts/LibreBarcode.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: normal;
+    src: local("LibreBarcode"),
+        url("/static/exercises/fonts/Roboto-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: bold;
+    src: local("LibreBarcode"),
+        url("/static/exercises/fonts/Roboto-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-style: italic;
+    font-weight: normal;
+    src: local("LibreBarcode"),
+        url("/static/exercises/fonts/Roboto-Italic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Roboto";
+    font-style: italic;
+    font-weight: bold;
+    src: local("LibreBarcode"),
+        url("/static/exercises/fonts/Roboto-BoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Quicksand";
+    font-style: normal;
+    font-weight: normal;
+    src: local("Quicksand"),
+        url("/static/exercises/fonts/Quicksand-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Quicksand";
+    font-style: normal;
+    font-weight: bold;
+    src: local("Quicksand"),
+        url("/static/exercises/fonts/Quicksand-Bold.ttf") format("truetype");
+}
+
+body {
+    font: 15px Roboto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    text-align: center;
+}
+.nav {
+    background: #292b2c;
+}
+
+.nav a[href] {
+    color: white;
+}
+
+.nav h1 {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0px;
+    font-size: 3vw;
+}
+
+.nav h1 a:hover {
+    text-decoration: none;
+}
+
+.jumbotron {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: Quicksand;
+    font-size: 20px;
+}
