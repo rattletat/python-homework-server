@@ -1,12 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from exercises.views import home_page as exercise_home
-from exercises.views import view_exercise as exercise_view_exercise
+from exercises import urls as exercise_urls
 from django.contrib import admin
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
-    path("", exercise_home),
-    path("exercise/<int:exercise_number>/", exercise_view_exercise),
+    path("", exercise_home, name="home"),
+    path("exercise/", include(exercise_urls)),
     path("admin/", admin.site.urls),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+
+# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
