@@ -65,4 +65,4 @@ def _restart_gunicorn(domain):
 
 
 def _restart_nginx():
-    sudo(f"systemctl restart gnix.service")
+    sudo(f"systemctl restart nginx.service")
