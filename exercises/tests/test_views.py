@@ -138,3 +138,16 @@ class ExerciseViewTest(TestCase):
         exercise = Exercise.objects.create(number=1, description="**Coffee**")
         response = self.client.get(exercise.get_absolute_url())
         self.assertContains(response, "<strong>Coffee</strong>")
+
+    def test_exercise_list_shows_correct_ordering(self):
+        exercise1 = Exercise.objects.create(number=1)
+        exercise2 = Exercise.objects.create(number=2)
+        exercise3 = Exercise.objects.create(number=3)
+        self.assertEqual(
+            list(Exercise.objects.all()),
+            [exercise1, exercise2, exercise3]
+        )
+
+    def test_exercise_string_representation(self):
+        exercise = Exercise(number=1)
+        self.assertEqual(str(exercise), 'Programmieraufgabe 1')
