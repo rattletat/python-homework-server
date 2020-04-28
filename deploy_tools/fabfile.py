@@ -1,10 +1,11 @@
 import random
 from fabric.contrib.files import append, exists
-from fabric.api import cd, env, local, run
+from fabric.api import cd, env, local, run, sudo
 
 env.use_ssh_config = True
 
 REPO_URL = "https://github.com/rattletat/homework-server.git"
+POETRY = "$HOME/.poetry/bin/poetry "
 
 
 def deploy(domain):
@@ -16,7 +17,7 @@ def deploy(domain):
         _create_or_update_dotenv(domain)
         _update_static_files()
         _update_database()
-        _restart_gunicorn(domain)
+        # _restart_gunicorn(domain)
 
 
 def _get_latest_source():
@@ -29,15 +30,15 @@ def _get_latest_source():
 
 
 def _update_virtualenv(domain):
-    poetry_failed = run("poetry about").failed
+    poetry_failed = run("poetry check").failed
     if poetry_failed:
         run(
             "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python"
         )
         run("source $HOME/.poetry/env")
     if not exists("pyproject.toml"):
-        run(f"poetry new . -n --src --name {domain}")
-    run("poetry install")
+        run(POETRY + f"new . -n --src --name {domain}")
+    run(POETRY + "install")
 
 
 def _create_or_update_dotenv(domain):
@@ -51,11 +52,11 @@ def _create_or_update_dotenv(domain):
 
 
 def _update_static_files():
-    run("poetry run python3.8 manage.py collectstatic --noinput")
+    run(POETRY + "run python3.8 manage.py collectstatic --noinput")
 
 
 def _update_database():
-    run("poetry run python3.8 manage.py migrate --noinput")
+    run(POETRY + "run python3.8 manage.py migrate --noinput")
 
 
 def _restart_gunicorn(domain):
