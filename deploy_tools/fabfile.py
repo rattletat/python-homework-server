@@ -64,5 +64,5 @@ def _restart_gunicorn(domain):
     sudo(f"systemctl restart gunicorn-{domain}.service")
 
 
-def _restart_gnix():
+def _restart_ginx():
     sudo(f"systemctl restart gnix.service")
