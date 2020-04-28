@@ -17,7 +17,8 @@ def deploy(domain):
         _create_or_update_dotenv(domain)
         _update_static_files()
         _update_database()
-        # _restart_gunicorn(domain)
+        _restart_gunicorn(domain)
+        _restart_nginx()
 
 
 def _get_latest_source():
@@ -61,3 +62,7 @@ def _update_database():
 
 def _restart_gunicorn(domain):
     sudo(f"systemctl restart gunicorn-{domain}.service")
+
+
+def _restart_gnix():
+    sudo(f"systemctl restart gnix.service")
