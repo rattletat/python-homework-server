@@ -5,9 +5,9 @@
 {% block jumbotron_text %}
   Willkommen auf der offiziellen Übungseite der Vorlesung "Programmieren für Sozialwissenschaftler*innen" im Sommersemester 2020!
   <br><br>
-  Auf dieser Seite findet ihr die Aufgabenbeschreibungen und Dateien zu allen Übungsaufgaben. Zusätzlich könnt ihr hier eure bearbeiten Aufgaben hochladen und automatisch testen lassen.
+  Auf dieser Seite findet ihr die Aufgabenbeschreibungen und Dateien zu allen Übungsaufgaben. Zusätzlich könnt ihr hier eure bearbeiteten Aufgaben hochladen und automatisch testen lassen.
   <br><br>
-  In der untenstehenden Tabelle sind alle Programmierübungen aufgelistet. Die blaumarkierten Zeile stellt dabei die derzeitige Aufgabe da, die ihr in dieser Woche bearbeiten sollt. Klickt auf den rechtsstehenden Button, um zu der Aufgabenbeschreibung und Abgabe zu kommen.
+  In der untenstehenden Tabelle sind alle Programmierübungen aufgelistet. Die blaumarkierte Zeile stellt dabei die derzeitige Aufgabe da, die ihr in dieser Woche bearbeiten sollt. Klickt auf den rechtsstehenden Button, um zu der Aufgabenbeschreibung und Abgabe zu kommen.
 {% endblock %}
 
 {% block pre_table_info %}
@@ -35,7 +35,7 @@
     {% if exercise.expired %}
       <tr class="table-default" align="center" id_"id_expired_exercise">
           <th scope="row">{{ exercise.number }}</th>
-          <td>{{ exercise.start_date }}</td>
+          <td>{{ exercise.release }}</td>
           <td>{{ exercise.deadline }}</td>
           <td><a href="{% url 'exercise:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
                   <button type="button" class="btn btn-outline-primary btn-sm">Zur Aufgabe</button>
@@ -45,7 +45,7 @@
     {% elif exercise.released %}
       <tr class="table-primary" align="center" id="id_active_exercise">
           <th scope="row">{{ exercise.number }}</th>
-          <td>{{ exercise.start_date }}</td>
+          <td>{{ exercise.release }}</td>
           <td>{{ exercise.deadline }}</td>
           <td><a href="{% url 'exercise:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
               <button type="button" class="btn btn-primary btn-sm">Zur Aufgabe</button>
@@ -55,7 +55,7 @@
     {% else %}
       <tr class="table-secondary" align="center" id="id_waiting_exercise">
           <th scope="row">{{ exercise.number }}</th>
-          <td>{{ exercise.start_date }}</td>
+          <td>{{ exercise.release }}</td>
           <td>{{ exercise.deadline }} </td>
           <td><button type="button" class="btn btn-secondary btn-sm" disabled>Nicht gestartet</button></td>
       </tr>

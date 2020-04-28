@@ -9,4 +9,4 @@ register = template.Library()
 @register.filter()
 @stringfilter
 def markdown(value):
-    return md.markdown(value, extensions=['fenced_code', 'codehilite'])
+    return md.markdown(value, extensions=['fenced_code', 'codehilite', 'tables', 'smarty', 'markdown_katex'])
