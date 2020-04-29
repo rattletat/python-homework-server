@@ -5,12 +5,12 @@ from django.utils.timezone import now
 from django.core.validators import MinValueValidator
 
 FILE_MIN_SIZE = 30
-FILE_MAX_SIZE = 1000
+FILE_MAX_SIZE = 3000
 
 
 def _user_directory_path(obj, _):
     if isinstance(obj, Submission):
-        timestamp = obj.uploaded.strftime('%d-%m-%Y_%H-%M-%S')
+        timestamp = obj.uploaded.strftime("%d-%m-%Y_%H-%M-%S")
         return f"submission/test_user/{obj.exercise.number}/{timestamp}.py"
     elif isinstance(obj, Exercise):
         return f"exercise/{obj.exercise.number}/description.md"
@@ -38,6 +38,12 @@ class Exercise(models.Model):
             return self.deadline < now()
         else:
             return False
+
+    def __str__(self):
+        return f"Programmieraufgabe {self.number}"
+
+    class Meta:
+        ordering = ("number",)
 
 
 class Submission(models.Model):

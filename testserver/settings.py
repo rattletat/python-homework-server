@@ -25,6 +25,7 @@ if "DJANGO_DEPLOY" in os.environ:
     DEBUG = False
     SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
     ALLOWED_HOSTS = [os.environ["SITENAME"]]
+    PREPEND_WWW = True
 else:
     DEBUG = True
     SECRET_KEY = "insecure-key-for-dev"
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "exercises",
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -97,6 +99,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
+AUTH_USER_MODEL = 'accounts.User'
+AUTHENTICATION_BACKENDS = ['accounts.authentication.PasswordlessAuthenticationBackend']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -118,3 +122,9 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
+
+EMAIL_HOST = "box.rattletat.com"
+EMAIL_HOST_USER = "noreply@rattletat.com"
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
