@@ -1,5 +1,4 @@
 from .base import FunctionalTest
-import os
 
 
 class UploadValidationTest(FunctionalTest):

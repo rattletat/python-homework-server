@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from unittest import skip
-from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.timezone import now, timedelta
 from exercises.forms import (
@@ -150,12 +149,11 @@ class FileUploadTest(TestCase):
     def test_valid_upload_redirects_to_same_page(self):
         exercise = Exercise.objects.create(number=2)
         file = SimpleUploadedFile("test.py", str.encode(PYTHON_MOCK))
-
+        url = exercise.get_absolute_url()
         response = self.client.post(exercise.get_absolute_url(), {"file": file})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], exercise.get_absolute_url())
 
-    @skip
     def test_cannot_upload_duplicate_files(self):
         exercise = Exercise.objects.create(number=1)
         file = SimpleUploadedFile("test.py", str.encode(PYTHON_MOCK))

@@ -1,4 +1,5 @@
 from django import forms
+# from django.core.exceptions import ValidationError
 from exercises.models import Submission
 from exercises.models import FILE_MIN_SIZE, FILE_MAX_SIZE
 
@@ -7,6 +8,7 @@ EXTENSION_ERROR = "Deine Datei muss eine .py Dateiendung haben!"
 MIME_ERROR = "Du musst eine valide Python Datei hochladen!"
 MIN_SIZE_ERROR = f"Deine Datei muss mindestens {FILE_MIN_SIZE}B groß sein!"
 MAX_SIZE_ERROR = f"Deine Datei muss kleiner als {FILE_MAX_SIZE}B sein!"
+DUPLICATE_ERROR = "Diese Datei hast du schon zuvor hochgeladen!"
 
 
 class SubmissionForm(forms.models.ModelForm):
@@ -21,6 +23,7 @@ class SubmissionForm(forms.models.ModelForm):
                 "mime": MIME_ERROR,
                 "min_size": MIN_SIZE_ERROR,
                 "max_size": MAX_SIZE_ERROR,
+                "duplicate": DUPLICATE_ERROR,
             }
         }
 

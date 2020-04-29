@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+import hashlib
+from django.core.exceptions import ValidationError
 from exercises.validators import FileValidator
 from django.utils.timezone import now
 from django.core.validators import MinValueValidator
@@ -10,8 +12,7 @@ FILE_MAX_SIZE = 3000
 
 def _user_directory_path(obj, _):
     if isinstance(obj, Submission):
-        timestamp = obj.uploaded.strftime("%d-%m-%Y_%H-%M-%S")
-        return f"submission/test_user/{obj.exercise.number}/{timestamp}.py"
+        return f"submission/test_user/{obj.exercise.number}/{obj.uploaded}.py"
     elif isinstance(obj, Exercise):
         return f"exercise/{obj.exercise.number}/description.md"
 
@@ -49,6 +50,7 @@ class Exercise(models.Model):
 class Submission(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True, unique=True)
     exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT)
+    file_sha1 = models.CharField(max_length=40, editable=False, unique=True)
     file = models.FileField(
         upload_to=_user_directory_path,
         validators=[
@@ -57,6 +59,27 @@ class Submission(models.Model):
                 max_size=FILE_MAX_SIZE,
                 allowed_mimetypes=["text/x-python"],
                 allowed_extensions=["py"],
-            )
+            ),
         ],
     )
+
+    # def clean(self):
+    #     hash = _generate_sha1(self.file)
+    #     # Don't duplicate files
+    #     if Submission.objects.filter(file_sha1=hash).count() > 0:
+    #         raise ValidationError('No duplicate files allowed', code='duplicate')
+    #     self.file_sha1 = hash
+
+
+# def _generate_sha1(file):
+#     sha = hashlib.sha1()
+#     file.seek(0)
+#     while(True):
+#         buf = file.read(104857600)
+#         if not buf:
+#             break
+#         sha.update(buf)
+#     sha1 = sha.hexdigest()
+#     file.seek(0)
+
+#     return sha1
