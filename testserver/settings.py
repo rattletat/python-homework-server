@@ -30,6 +30,7 @@ else:
     SECRET_KEY = "insecure-key-for-dev"
     ALLOWED_HOSTS = ['*']
 
+DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -122,7 +123,7 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
 
 EMAIL_HOST = "box.rattletat.com"
-EMAIL_HOST_USER = "noreply@rattletat.com"
+EMAIL_HOST_USER = "hello@rattletat.com"
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

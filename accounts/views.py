@@ -19,7 +19,7 @@ def send_login_email(request):
         f"""Benutze diesen Link um dich auf der Seite einzuloggen und deine Hausaufgaben abzugeben:
         \n\n{url}
         \n\n Halte diese URL geheim!""",
-        "noreply@xyz321.de",
+        "hello@rattletat.com",
         [email],
     )
     return render(request, "login_email_sent.html")
