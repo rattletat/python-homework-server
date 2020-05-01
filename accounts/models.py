@@ -1,31 +1,20 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+# from django.contrib import auth
+import uuid
+
+# auth.signals.user_logged_in.disconnect(auth.models.update_last_login)
+
+
+class User(models.Model):
+    email = models.EmailField(primary_key=True, default=None)
+    identifier = models.TextField(default=None, unique=True, null=True, blank=True, max_length=8)
+    REQUIRED_FIELDS = []
+    USERNAME_FIELD = "email"
+    is_anonymous = False
+    is_authenticated = True
 
 
 class Token(models.Model):
     email = models.EmailField()
-    uid = models.CharField(max_length=255)
-
-
-class UserManager(BaseUserManager):
-
-    def create_user(self, email):
-        User.objects.create(email=email)
-
-    def create_superuser(self, email, password):
-        self.create_user(email)
-
-
-class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(primary_key=True)
-    USERNAME_FIELD = 'email'
-
-    objects = UserManager()
-
-    @property
-    def is_staff(self):
-        return self.email == 'hello@rattletat.com'
-
-    @property
-    def is_active(self):
-        return True
+    identifier = models.CharField(default=None, unique=True, null=True, blank=True, max_length=8)
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

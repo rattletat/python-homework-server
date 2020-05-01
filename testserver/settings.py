@@ -28,7 +28,7 @@ if "DJANGO_DEPLOY" in os.environ:
 else:
     DEBUG = True
     SECRET_KEY = "insecure-key-for-dev"
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ["*"]
 
 DEBUG = True
 # Application definition
@@ -93,13 +93,14 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
 ]
 
-AUTH_USER_MODEL = 'accounts.User'
-AUTHENTICATION_BACKENDS = ['accounts.authentication.PasswordlessAuthenticationBackend']
+AUTH_USER_MODEL = "accounts.User"
+AUTHENTICATION_BACKENDS = ["accounts.authentication.PasswordlessAuthenticationBackend"]
+LOGOUT_REDIRECT_URL = 'home'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -123,7 +124,7 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
 
 EMAIL_HOST = "box.rattletat.com"
-EMAIL_HOST_USER = "hello@rattletat.com"
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_HOST_USER = "noreply@rattletat.com"
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

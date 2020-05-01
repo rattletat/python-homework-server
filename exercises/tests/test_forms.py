@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from unittest import skip
+from django.contrib import auth
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils.timezone import now, timedelta
 from exercises.forms import (
@@ -13,6 +13,7 @@ from exercises.forms import (
 )
 from exercises.models import Exercise, Submission
 
+User = auth.get_user_model()
 
 PYTHON_MOCK = """
 def hello_world(x):
@@ -35,6 +36,10 @@ endobj
 
 class SubmissionFormTest(TestCase):
 
+    def setUp(self):
+        self.user = User.objects.create(email='a@b.com')
+        self.client.force_login(self.user)
+
     def test_can_not_save_submission_without_file(self):
         exercise = Exercise.objects.create(number=1)
 
@@ -42,7 +47,7 @@ class SubmissionFormTest(TestCase):
 
         self.assertFalse(form.is_valid())
         with self.assertRaises(ValueError):
-            form.save(exercise)
+            form.save(self.user, exercise)
 
     def test_can_not_save_small_files(self):
         exercise = Exercise.objects.create(number=1)
@@ -54,7 +59,7 @@ class SubmissionFormTest(TestCase):
         self.assertIn("file", form.errors.keys())
         self.assertEqual(form.errors["file"], [MIN_SIZE_ERROR])
         with self.assertRaises(ValueError):
-            form.save(exercise)
+            form.save(self.user, exercise)
 
     def test_can_not_save_wrong_extension(self):
         exercise = Exercise.objects.create(number=1)
@@ -66,7 +71,7 @@ class SubmissionFormTest(TestCase):
         self.assertIn("file", form.errors.keys())
         self.assertEqual(form.errors["file"], [EXTENSION_ERROR])
         with self.assertRaises(ValueError):
-            form.save(exercise)
+            form.save(self.user, exercise)
 
     def test_can_not_save_wrong_mime_types(self):
         exercise = Exercise.objects.create(number=1)
@@ -78,10 +83,14 @@ class SubmissionFormTest(TestCase):
         self.assertIn("file", form.errors.keys())
         self.assertEqual(form.errors["file"], [MIME_ERROR])
         with self.assertRaises(ValueError):
-            form.save(exercise)
+            form.save(self.user, exercise)
 
 
 class FileUploadTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create(email='a@b.com')
+        self.client.force_login(self.user)
 
     def test_file_upload_works(self):
         exercise = Exercise.objects.create(number=1)
@@ -149,7 +158,6 @@ class FileUploadTest(TestCase):
     def test_valid_upload_redirects_to_same_page(self):
         exercise = Exercise.objects.create(number=2)
         file = SimpleUploadedFile("test.py", str.encode(PYTHON_MOCK))
-        url = exercise.get_absolute_url()
         response = self.client.post(exercise.get_absolute_url(), {"file": file})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], exercise.get_absolute_url())

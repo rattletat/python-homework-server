@@ -27,6 +27,7 @@ class SubmissionForm(forms.models.ModelForm):
             }
         }
 
-    def save(self, exercise):
+    def save(self, user, exercise):
+        self.instance.user = user
         self.instance.exercise = exercise
         return super().save()

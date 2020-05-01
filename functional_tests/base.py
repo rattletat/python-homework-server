@@ -10,7 +10,7 @@ from django.conf import settings
 
 from exercises.models import Exercise
 
-MAX_WAIT = 10
+MAX_WAIT = 5
 
 
 class FunctionalTest(LiveServerTestCase):
@@ -66,7 +66,7 @@ class FunctionalTest(LiveServerTestCase):
 
     # General helper
     def get_title(self):
-        return self.browser.find_element_by_css_selector(".nav h1 a")
+        return self.browser.find_element_by_css_selector(".bg-dark h1 a")
 
     def get_subtitle(self):
         return self.browser.find_element_by_css_selector(".jumbotron h2")

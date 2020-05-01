@@ -1,8 +1,11 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.timezone import now, timedelta
+from django.contrib import auth
 
 from exercises.models import Exercise, Submission
+
+User = auth.get_user_model()
 
 
 class ExerciseModelTest(TestCase):
@@ -70,6 +73,7 @@ class SubmissionModelTest(TestCase):
 
     def test_submission_is_related_to_exercise(self):
         exercise = Exercise.objects.create(number=1)
-        submission = Submission(exercise=exercise)
+        user = User.objects.create(email="a@b.com")
+        submission = Submission(exercise=exercise, user=user)
         submission.save()
         self.assertIn(submission, exercise.submission_set.all())

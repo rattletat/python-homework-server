@@ -20,7 +20,7 @@ class LoginTest(FunctionalTest):
 
         # A message appears telling her an email has been sent
         self.wait_for(lambda: self.assertIn(
-            'Schau in deinem Email-Postfach nach!',
+            'Dein Login Link ist soeben in deinem Email Postfach angekommen.',
             self.browser.find_element_by_tag_name('body').text
         ))
 
@@ -41,8 +41,13 @@ class LoginTest(FunctionalTest):
         self.browser.get(url)
 
         # she is logged in!
+        self.assertIn(TEST_EMAIL, self.browser.page_source)
         self.wait_for(
-            lambda: self.browser.find_element_by_link_text('Logout')
+            lambda: self.browser.find_element_by_link_text('Log out').click()
         )
-        navbar = self.browser.find_element_by_css_selector('.navbar')
-        self.assertIn(TEST_EMAIL, navbar.text)
+
+        # she is logged out!
+        self.wait_for(
+            lambda: self.browser.find_element_by_name('email')
+        )
+        self.assertNotIn(TEST_EMAIL, self.browser.page_source)

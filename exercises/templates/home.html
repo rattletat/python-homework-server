@@ -37,7 +37,7 @@
           <th scope="row">{{ exercise.number }}</th>
           <td>{{ exercise.release }}</td>
           <td>{{ exercise.deadline }}</td>
-          <td><a href="{% url 'exercise:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
+          <td><a href="{% url 'exercises:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
                   <button type="button" class="btn btn-outline-primary btn-sm">Zur Aufgabe</button>
               </a>
           </td>
@@ -47,7 +47,7 @@
           <th scope="row">{{ exercise.number }}</th>
           <td>{{ exercise.release }}</td>
           <td>{{ exercise.deadline }}</td>
-          <td><a href="{% url 'exercise:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
+          <td><a href="{% url 'exercises:view_exercise' exercise.number %}" id="id_exercise_{{ exercise.number }}">
               <button type="button" class="btn btn-primary btn-sm">Zur Aufgabe</button>
               </a>
           </td>

@@ -11,27 +11,56 @@
   </head>
 
   <body>
-    <div class="nav">
-      <h1>
-        <a style = "font-family:LibreBarcode;" href="/">Programmieren fuer Sozialwissenschaftler*innen<a>
-      </h1>
-    </div>
 
-    <div class="navbar">
-    {% if user.is_authenticated %}
+    <nav class="bg-dark">
+      <h1><a href="/">Programmieren fuer Sozialwissenschaftler*innen<a></h1>
 
-    <p>Logged in as {{ user.email }}</p>
-    <p><a id="id_logout" href="{% url 'logout' %}">Logout</a></p>
+      <div class="alert alert-secondary" role="alert" align="center">
+    <div class="container">
+    {% if user.email %}
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-text">Logged in as {{ user.email }}</li>
+        <li><a href="{% url 'accounts:logout' %}">Log out</a></li>
+      </ul>
 
     {% else %}
 
-    <form method="POST" action ="{% url 'send_login_email'%}" align="center" class="alert alert-warning">
-      Gib bitte dein TUM Email zum Einloggen an: <input name="email" type="text"/>
-      {% csrf_token %}
-    </form>
+      <form class="navbar-form navbar-right"
+            method="POST"
+            action="{% url 'accounts:send_login_email' %}">
+       <div class="row">
+        <div class="col">
+        <input class="form-control form-control-sm" name="email" type="text" placeholder="Deine Email Adresse" required/>
+        </div>
+        <div class="col">
+        <input class="form-control form-control-sm" name="matric" type="text" placeholder="Matrikelnummer z.B. 01234567"/>
+        </div>
+        <div class="col">
+        <button type="submit" class="form-control form-control-sm btn-dark btn-sm">Abschicken</button>
+        </div>
+        {% csrf_token %}
+      </form>
 
     {% endif %}
     </div>
+      </div>
+    </nav>
+
+{% if messages %}
+     {% for message in messages %}
+       {% if message.level_tag == 'success' %}
+      <div class="alert alert-success" role="alert" align="center">
+         <span class="text-success small">{{ message }}</span>
+      </div>
+       {% else %}
+      <div class="alert alert-danger" role="alert" align="center">
+         <span class="text-error small">{{ message }}</span>
+      </div>
+       {% endif %}
+     {% endfor %}
+{% endif %}
+
 
     {% block statusbar %}{% endblock %}
 

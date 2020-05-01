@@ -1,39 +1,34 @@
-from django.shortcuts import render, redirect
-import uuid
-import sys
-from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.core.mail import send_mail
-
+from django.shortcuts import redirect, reverse
+from django.contrib import auth, messages
 from accounts.models import Token
+from django.conf import settings
+
+LOGIN_MAIL_SENDER = settings.EMAIL_HOST_USER
 
 
 def send_login_email(request):
     email = request.POST["email"]
-    uid = str(uuid.uuid4())
-    Token.objects.create(email=email, uid=uid)
-    print("saving uid", uid, "for email", email, file=sys.stderr)
-    url = request.build_absolute_uri(f"/accounts/login?uid={uid}")
+    token = Token.objects.create(email=email)
+    url = request.build_absolute_uri(
+        reverse("accounts:login") + "?token=" + str(token.uid)
+    )
+    message_body = f"Benutze diesen Link um dich auf der Seite einzuloggen:\n\n{url}"
     send_mail(
         "Dein Login Link für 'Programmieren für Sozialwissenschaftler*innen'",
-        f"""Benutze diesen Link um dich auf der Seite einzuloggen und deine Hausaufgaben abzugeben:
-        \n\n{url}
-        \n\n Halte diese URL geheim!""",
-        "hello@rattletat.com",
+        message_body,
+        LOGIN_MAIL_SENDER,
         [email],
     )
-    return render(request, "login_email_sent.html")
+    messages.success(
+        request, "Dein Login Link ist soeben in deinem Email Postfach angekommen."
+    )
+    return redirect("home")
 
 
 def login(request):
-    print("login view", file=sys.stderr)
-    uid = request.GET.get("uid")
-    user = authenticate(uid=uid)
-    if user is not None:
-        auth_login(request, user)
-    return redirect("/")
-
-
-def logout(request):
-    auth_logout(request)
-    return redirect("/")
+    token = request.GET.get('token')
+    user = auth.authenticate(uid=token)
+    if user:
+        auth.login(request, user)
+    return redirect("home")

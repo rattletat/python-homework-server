@@ -1,10 +1,12 @@
 from django.db import models
 from django.urls import reverse
-import hashlib
-from django.core.exceptions import ValidationError
+# import hashlib
+# from django.core.exceptions import ValidationError
 from exercises.validators import FileValidator
 from django.utils.timezone import now
 from django.core.validators import MinValueValidator
+from accounts.models import User
+from django.conf import settings
 
 FILE_MIN_SIZE = 30
 FILE_MAX_SIZE = 3000
@@ -26,7 +28,7 @@ class Exercise(models.Model):
     description = models.TextField(null=True)
 
     def get_absolute_url(self):
-        return reverse("exercise:view_exercise", args=[self.number])
+        return reverse("exercises:view_exercise", args=[self.number])
 
     def released(self):
         if self.release:
@@ -50,7 +52,8 @@ class Exercise(models.Model):
 class Submission(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True, unique=True)
     exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT)
-    file_sha1 = models.CharField(max_length=40, editable=False, unique=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    # file_sha1 = models.CharField(max_length=40, editable=False, unique=True)
     file = models.FileField(
         upload_to=_user_directory_path,
         validators=[

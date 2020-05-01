@@ -1,24 +1,19 @@
-import sys
 from accounts.models import User, Token
 
 
 class PasswordlessAuthenticationBackend(object):
 
-    def authenticate(self, uid):
-        print('uid', uid, file=sys.stderr)
-        if not Token.objects.filter(uid=uid).exists():
-            print('no token found', file=sys.stderr)
-            return None
-        token = Token.objects.get(uid=uid)
-        print('got token', file=sys.stderr)
+    def authenticate(self, request, uid):
         try:
-            user = User.objects.get(email=token.email)
-            print('got user', file=sys.stderr)
-            return user
+            token = Token.objects.get(uid=uid)
+            return User.objects.get(email=token.email, identifier=token.identifier)
+        except Token.DoesNotExist:
+            return None
         except User.DoesNotExist:
-            print('new user', file=sys.stderr)
-            return User.objects.create(email=token.email)
-
+            return User.objects.create(email=token.email, identifier=token.identifier)
 
     def get_user(self, email):
-        return User.objects.get(email=email)
+        try:
+            return User.objects.get(email=email)
+        except User.DoesNotExist:
+            return None

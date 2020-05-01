@@ -22,7 +22,7 @@ def view_exercise(request, number):
         form = SubmissionForm(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save(exercise)
+            form.save(request.user, exercise)
             return redirect(exercise)
 
     context = {"exercise": exercise, "form": form}

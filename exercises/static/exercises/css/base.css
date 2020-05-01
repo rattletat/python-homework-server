@@ -64,24 +64,27 @@ h3,
 h4 {
     text-align: center;
 }
-.nav {
-    background: #292b2c;
-}
 
-.nav a[href] {
-    color: white;
-}
-
-.nav h1 {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0px;
+nav h1 a {
+    font-family: LibreBarcode;
     font-size: 3vw;
 }
 
-.nav h1 a:hover {
+nav h1 a[href] {
     text-decoration: none;
+    color: white;
 }
+
+/* .nav a[href] { */
+/*     color: white; */
+/* } */
+
+/* .nav h1 { */
+/*     margin-left: auto; */
+/*     margin-right: auto; */
+/*     margin-top: 0px; */
+/*     font-size: 3vw; */
+/* } */
 
 .jumbotron {
     padding-top: 10px;

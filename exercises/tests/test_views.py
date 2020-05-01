@@ -1,7 +1,10 @@
 from django.test import TestCase
 from exercises.models import Exercise
 from django.utils.timezone import timedelta, now
+from django.contrib import auth
 from exercises.forms import SubmissionForm
+
+User = auth.get_user_model()
 
 
 class HomePageTest(TestCase):
