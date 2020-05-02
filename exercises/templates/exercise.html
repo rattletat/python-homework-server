@@ -28,7 +28,13 @@
 {% endblock %}
 
 {% block post_table_info %}
-{% if user.is_authenticated %}
+{% if not user.is_authenticated %}
+<h4>Du musst dich erst anmelden um eine Abgabe zu erstellen!</h4>
+{% elif not exercise.released %}
+<h4>Diese Programmieraufgabe ist noch nicht zur Abgabe freigegeben!</h4>
+{% elif exercise.expired %}
+<h4>Diese Programmieraufgabe ist abgelaufen!</h4>
+{% else %}
 <form
   action="{% url 'exercises:view_exercise' exercise.number %}"
   method="POST"
@@ -47,7 +53,5 @@
     <button type="submit" class="btn btn-primary">Abschicken</button>
   </div>
 </form>
-{% else %}
-<h4>Du musst dich erst anmelden um eine Abgabe zu erstellen!</h4>
 {% endif %}
 {% endblock %}
