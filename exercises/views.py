@@ -22,7 +22,7 @@ def view_exercise(request, number):
         return redirect(home_page)
 
     form = SubmissionForm()
-    if request.method == "POST":
+    if not exercise.expired and request.method == "POST":
         form = SubmissionForm(request.POST, request.FILES)
 
         if form.is_valid():
