@@ -57,6 +57,7 @@ def _update_static_files():
 
 
 def _update_database():
+    run(POETRY + "run python3.8 manage.py makemigrations")
     run(POETRY + "run python3.8 manage.py migrate --noinput")
 
 
