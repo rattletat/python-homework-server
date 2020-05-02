@@ -60,11 +60,11 @@
 {% block C %}
 {% if not exercise.released %}
 <div class="alert alert-dark" role="alert" align="center">
-    <span class="text-warning medium">Diese Programmieraufgabe ist noch nicht zur Abgabe freigegeben!</span>
+    <span class="text-dark medium">Diese Programmieraufgabe ist noch nicht zur Abgabe freigegeben!</span>
 </div>
 {% elif exercise.expired %}
 <div class="alert alert-dark" role="alert" align="center">
-    <span class="text-warning medium">Diese Programmieraufgabe ist abgelaufen!</span>
+    <span class="text-dark medium">Diese Programmieraufgabe ist abgelaufen!</span>
 </div>
 {% elif user.is_authenticated %}
 <form

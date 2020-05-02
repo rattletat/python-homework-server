@@ -1,6 +1,7 @@
 from django.core.mail import send_mail
 from django.shortcuts import redirect, reverse, render
 from django.contrib import auth, messages
+from smtplib import SMTPResponseException
 
 # from django.conf import settings
 from accounts.forms import LoginForm
@@ -8,7 +9,7 @@ from exercises.models import Exercise
 
 # LOGIN_MAIL_SENDER = settings.EMAIL_HOST_USER
 MAIL_DISPLAYED_SENDER = "noreply@xyz321.de"
-UNEXPECTED_FAILURE = (
+SEND_MAIL_FAILURE = (
     "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten. "
     "Bitte kontaktiere Michael Brauweiler bei Slack."
 )
@@ -41,8 +42,8 @@ def send_login_email(request):
             request, "Dein Login Link ist soeben in deinem Email Postfach angekommen."
         )
         login.save()
-    except Exception:
-        messages.error(request, UNEXPECTED_FAILURE)
+    except SMTPResponseException:
+        messages.error(request, SEND_MAIL_FAILURE)
     return redirect("home")
 
 
@@ -52,6 +53,7 @@ def login(request):
         user = auth.authenticate(uid=token)
         if user:
             user.email_verified = True
+            user.save()
             auth.login(request, user)
         else:
             messages.error(request, "Dieser Nutzer existiert nicht!")

@@ -43,13 +43,13 @@ def _update_virtualenv(domain):
 
 
 def _create_or_update_dotenv(domain):
-    append(".env", "DJANGO_DEPLOY=y")
-    append(".env", f"SITENAME={domain}")
-    current_contents = run("cat .env")
+    append(".envrc", "DJANGO_DEPLOY=y")
+    append(".envrc", f"SITENAME={domain}")
+    current_contents = run("cat .envrc")
     if "DJANGO_SECRET_KEY" not in current_contents:
         choices = "abcdefghijklmnopqrstuvwxyz123456789"
         new_secret = "".join(random.SystemRandom().choices(choices, k=50))
-        append(".env", f"DJANGO_SECRET_KEY={new_secret}")
+        append(".envrc", f"DJANGO_SECRET_KEY={new_secret}")
 
 
 def _update_static_files():
