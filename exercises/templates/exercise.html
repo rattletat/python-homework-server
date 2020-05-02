@@ -3,14 +3,36 @@
 
 {% block sub_header_text%}Programmieraufgabe {{ exercise.number }}{% endblock %}
 
-
-{% block jumbotron_text %}
-<span id="id_description">
-  {{ exercise.description | markdown | safe }}
-</span>
+{% block login %}
+{% if user.is_authenticated %}
+<ul class="nav navbar-nav">
+    {% if user.is_staff %}
+    <li class="navbar-text">
+        Eingeloggt als {{ user.email }} (Admin)
+    </li>
+    {% elif user.identifier %}
+    <li class="navbar-text">
+        Eingeloggt als {{ user.email }} (TUM-Student: {{ user.identifier }})
+    </li>
+    {% else %}
+    <li class="navbar-text">
+        Eingeloggt als {{ user.email }} (TUM-extern)
+    </li>
+    {% endif %}
+    <li><a href="{% url "accounts:logout" %}">Ausloggen</a></li>
+</ul>
+{% else %}
+<span class="text-dark medium">Du bist derzeit nicht angemeldet und kannst keine Abgaben erstellen. <a href="{% url "home" %}">Melde dich an.</a></span>
+{% endif %}
 {% endblock %}
 
-{% block table %}
+{% block A %}
+<table class="table table-striped" id="exercises">
+<tbody>
+<tr id="highscore">
+  <td>Dein Highscore:</td>
+  <td>0</td>
+</tr>
 <tr id="id_status">
   <td>Status:</td>
   {% if exercise.expired %}
@@ -25,37 +47,43 @@
   <td>Deadline:</td>
   <td>{{ exercise.deadline }}</td>
 </tr>
-<tr id="highscore">
-  <td>Dein Highscore:</td>
-  <td>0</td>
-</tr>
+    </tbody>
+</table>
 {% endblock %}
 
-{% block post_table_info %}
-{% if not user.is_authenticated %}
-<h4>Du musst dich erst anmelden um eine Abgabe zu erstellen!</h4>
-{% elif not exercise.released %}
-<h4>Diese Programmieraufgabe ist noch nicht zur Abgabe freigegeben!</h4>
+{% block B %}
+<span id="id_description">
+  {{ exercise.description | markdown | safe }}
+</span>
+{% endblock %}
+
+{% block C %}
+{% if not exercise.released %}
+<div class="alert alert-dark" role="alert" align="center">
+    <span class="text-warning medium">Diese Programmieraufgabe ist noch nicht zur Abgabe freigegeben!</span>
+</div>
 {% elif exercise.expired %}
-<h4>Diese Programmieraufgabe ist abgelaufen!</h4>
-{% else %}
+<div class="alert alert-dark" role="alert" align="center">
+    <span class="text-warning medium">Diese Programmieraufgabe ist abgelaufen!</span>
+</div>
+{% elif user.is_authenticated %}
 <form
-  action="{% url 'exercises:view_exercise' exercise.number %}"
-  method="POST"
-  enctype="multipart/form-data"
-  align="center"
->
-  {% csrf_token %}
-  <div class="form-group file">
-    <span class="alert alert-secondary" role="alert">
-      <label class="control-label">Hier die Datei auswählen: </label>
-      {{ form.file }}
-    </span>
-  </div>
-  <div class="form-group">
-    <br />
-    <button type="submit" class="btn btn-primary">Abschicken</button>
-  </div>
+       action="{% url "exercises:view_exercise" exercise.number %}"
+       method="POST"
+       enctype="multipart/form-data"
+       align="center"
+       >
+       {% csrf_token %}
+       <div class="form-group file">
+           <span class="alert alert-secondary" role="alert">
+               <label class="control-label">Hier die Datei auswählen: </label>
+               {{ form.file }}
+           </span>
+       </div>
+       <div class="form-group">
+           <br />
+           <button type="submit" class="form-control form-control btn-dark btn">Abschicken</button>
+       </div>
 </form>
 {% endif %}
 {% endblock %}

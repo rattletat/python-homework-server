@@ -4,27 +4,26 @@ from django.contrib import auth, messages
 
 # from django.conf import settings
 from accounts.forms import LoginForm
+from exercises.models import Exercise
 
 # LOGIN_MAIL_SENDER = settings.EMAIL_HOST_USER
 MAIL_DISPLAYED_SENDER = "noreply@xyz321.de"
 UNEXPECTED_FAILURE = (
-    "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten."
+    "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten. "
     "Bitte kontaktiere Michael Brauweiler bei Slack."
 )
 
 
 def send_login_email(request):
-    next = request.POST.get("next", reverse("home"))
-
-    if request.method == "GET":
-        return redirect(next)
-
     login = LoginForm(request.POST)
     if not login.is_valid():
-        return render(request, "home.html", {"login": login})
+        for error in login.errors.values():
+            messages.error(request, error[0])
+        exercises = Exercise.objects.all()
+        return render(request, "home.html", {"exercises": exercises, "login": login})
 
-    # Send mail
     try:
+        # If email is invalid don't save user
         user = login.save(commit=False)
         url = request.build_absolute_uri(
             reverse("accounts:login") + "?token=" + str(user.uid)
@@ -41,15 +40,13 @@ def send_login_email(request):
         messages.success(
             request, "Dein Login Link ist soeben in deinem Email Postfach angekommen."
         )
-        user = login.save()
+        login.save()
     except Exception:
         messages.error(request, UNEXPECTED_FAILURE)
-
-    return redirect(next)
+    return redirect("home")
 
 
 def login(request):
-    next = request.POST.get("next", reverse("home"))
     token = request.GET.get("token")
     if token:
         user = auth.authenticate(uid=token)
@@ -57,8 +54,6 @@ def login(request):
             user.email_verified = True
             auth.login(request, user)
         else:
-            messages.error(
-                request, "Dieser Nutzer existiert nicht!"
-            )
+            messages.error(request, "Dieser Nutzer existiert nicht!")
 
-    return redirect(next)
+    return redirect('home')

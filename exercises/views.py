@@ -12,7 +12,6 @@ def home_page(request):
 
 
 def view_exercise(request, number):
-    login = request.POST.get('login', LoginForm())
     try:
         exercise = Exercise.objects.get(number=number)
     except Exercise.DoesNotExist:
@@ -31,6 +30,9 @@ def view_exercise(request, number):
                 request, "Abgabe erfolgreich hochgeladen!"
             )
             return redirect(exercise)
+        else:
+            for error in form.errors.values():
+                messages.error(request, error[0])
 
-    context = {"exercise": exercise, "form": form, "login": login}
+    context = {"exercise": exercise, "form": form}
     return render(request, "exercise.html", context)
