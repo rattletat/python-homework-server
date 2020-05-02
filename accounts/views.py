@@ -42,15 +42,23 @@ def send_login_email(request):
             request, "Dein Login Link ist soeben in deinem Email Postfach angekommen."
         )
         user = login.save()
-        return redirect(next)
     except Exception:
         messages.error(request, UNEXPECTED_FAILURE)
-        return redirect(next)
+
+    return redirect(next)
 
 
 def login(request):
+    next = request.POST.get("next", reverse("home"))
     token = request.GET.get("token")
-    user = auth.authenticate(uid=token)
-    if user:
-        auth.login(request, user)
-    return render(request, "home.html")
+    if token:
+        user = auth.authenticate(uid=token)
+        if user:
+            user.email_verified = True
+            auth.login(request, user)
+        else:
+            messages.error(
+                request, "Dieser Nutzer existiert nicht!"
+            )
+
+    return redirect(next)

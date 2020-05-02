@@ -16,7 +16,9 @@
 
   <body>
     <nav class="bg-dark">
-      <h1><a href="/">Programmieren fuer Sozialwissenschaftler*innen</a></h1>
+    <div class="container">
+      <h1><a id="header" href="/">Programmieren fuer Sozialwissenschaftler*innen</a></h1>
+    </div>
 
       <div class="alert alert-secondary" role="alert" align="center">
         <div class="container">
@@ -128,4 +130,6 @@
       {% block post_table_info %}{% endblock %}
     </div>
   </body>
+    <script type="text/javascript" src="{% static "exercises/js/fitty.min.js" %}"></script>
+    <script>fitty('#header');</script>
 </html>

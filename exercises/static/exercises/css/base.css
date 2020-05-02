@@ -65,12 +65,8 @@ h4 {
     text-align: center;
 }
 
-nav h1 a {
-    font-family: LibreBarcode;
-    font-size: 3vw;
-}
-
 nav h1 a[href] {
+    font-family: LibreBarcode;
     text-decoration: none;
     color: white;
 }

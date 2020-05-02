@@ -47,6 +47,7 @@ class MyUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True, validators=[EmailValidator(code="invalid")])
+    email_verified = models.BooleanField(default=False)
     password = models.CharField(max_length=20, default="", editable=False)
     identifier = models.IntegerField(
         default=None,
