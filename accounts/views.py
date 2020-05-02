@@ -1,34 +1,56 @@
 from django.core.mail import send_mail
-from django.shortcuts import redirect, reverse
+from django.shortcuts import redirect, reverse, render
 from django.contrib import auth, messages
-from accounts.models import Token
-from django.conf import settings
 
-LOGIN_MAIL_SENDER = settings.EMAIL_HOST_USER
+# from django.conf import settings
+from accounts.forms import LoginForm
+
+# LOGIN_MAIL_SENDER = settings.EMAIL_HOST_USER
+MAIL_DISPLAYED_SENDER = "noreply@xyz321.de"
+UNEXPECTED_FAILURE = (
+    "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten."
+    "Bitte kontaktiere Michael Brauweiler bei Slack."
+)
 
 
 def send_login_email(request):
-    email = request.POST["email"]
-    token = Token.objects.create(email=email)
-    url = request.build_absolute_uri(
-        reverse("accounts:login") + "?token=" + str(token.uid)
-    )
-    message_body = f"Benutze diesen Link um dich auf der Seite einzuloggen:\n\n{url}"
-    send_mail(
-        "Dein Login Link für 'Programmieren für Sozialwissenschaftler*innen'",
-        message_body,
-        LOGIN_MAIL_SENDER,
-        [email],
-    )
-    messages.success(
-        request, "Dein Login Link ist soeben in deinem Email Postfach angekommen."
-    )
-    return redirect("home")
+    next = request.POST.get("next", reverse("home"))
+
+    if request.method == "GET":
+        return redirect(next)
+
+    login = LoginForm(request.POST)
+    if not login.is_valid():
+        return render(request, "home.html", {"login": login})
+
+    # Send mail
+    try:
+        user = login.save(commit=False)
+        url = request.build_absolute_uri(
+            reverse("accounts:login") + "?token=" + str(user.uid)
+        )
+        message_body = (
+            f"Benutze diesen Link um dich auf der Seite einzuloggen:\n\n{url}"
+        )
+        send_mail(
+            "Dein Login Link für 'Programmieren für Sozialwissenschaftler*innen'",
+            message_body,
+            MAIL_DISPLAYED_SENDER,
+            [user.email],
+        )
+        messages.success(
+            request, "Dein Login Link ist soeben in deinem Email Postfach angekommen."
+        )
+        user = login.save()
+        return redirect(next)
+    except Exception:
+        messages.error(request, UNEXPECTED_FAILURE)
+        return redirect(next)
 
 
 def login(request):
-    token = request.GET.get('token')
+    token = request.GET.get("token")
     user = auth.authenticate(uid=token)
     if user:
         auth.login(request, user)
-    return redirect("home")
+    return render(request, "home.html")

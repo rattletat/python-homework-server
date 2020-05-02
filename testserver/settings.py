@@ -99,7 +99,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "accounts.User"
-AUTHENTICATION_BACKENDS = ["accounts.authentication.PasswordlessAuthenticationBackend"]
+AUTHENTICATION_BACKENDS = (
+        "accounts.authentication.PasswordlessAuthenticationBackend",
+        "django.contrib.auth.backends.ModelBackend",
+)
 LOGOUT_REDIRECT_URL = 'home'
 
 # Internationalization
@@ -123,8 +126,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
 
-EMAIL_HOST = "box.rattletat.com"
-EMAIL_HOST_USER = "noreply@rattletat.com"
+EMAIL_HOST = "posteo.de"
+EMAIL_HOST_USER = "michael.brauweiler@posteo.net"
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

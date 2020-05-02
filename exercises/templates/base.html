@@ -1,68 +1,110 @@
 {% load static %}
+{% load form_widgets %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scaie=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scaie=1, shrink-to-fit=no"
+    />
     <title>Programmieren fuer Sozialwissenschaftler*innen</title>
-    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/code.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/code.css" %}"> 
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/bootstrap/css/bootstrap.min.css" %}"> 
     <link rel="stylesheet" type="text/css" href="{% static "exercises/css/base.css" %}">
   </head>
 
   <body>
-
     <nav class="bg-dark">
-      <h1><a href="/">Programmieren fuer Sozialwissenschaftler*innen<a></h1>
+      <h1><a href="/">Programmieren fuer Sozialwissenschaftler*innen</a></h1>
 
       <div class="alert alert-secondary" role="alert" align="center">
-    <div class="container">
-    {% if user.email %}
+        <div class="container">
+          {% if user.is_authenticated %}
 
-      <ul class="nav navbar-nav navbar-right">
-        <li class="navbar-text">Logged in as {{ user.email }}</li>
-        <li><a href="{% url 'accounts:logout' %}">Log out</a></li>
-      </ul>
+          <ul class="nav navbar-nav">
+            {% if user.identifier %}
+            <li class="navbar-text">
+              Eingeloggt als {{ user.email }} (Matrikelnummer: {{ user.identifier }})
+            </li>
+            {% else %}
+            <li class="navbar-text">
+              Eingeloggt als {{ user.email }} (TUM-extern)
+            </li>
+            {% endif %}
+            <li><a href="{% url 'accounts:logout' %}">Ausloggen</a></li>
+          </ul>
 
-    {% else %}
+          {% else %}
 
-      <form class="navbar-form navbar-right"
+          <form
+            class="navbar-form"
             method="POST"
-            action="{% url 'accounts:send_login_email' %}">
-       <div class="row">
-        <div class="col">
-        <input class="form-control form-control-sm" name="email" type="text" placeholder="Deine Email Adresse" required/>
-        </div>
-        <div class="col">
-        <input class="form-control form-control-sm" name="matric" type="text" placeholder="Matrikelnummer z.B. 01234567"/>
-        </div>
-        <div class="col">
-        <button type="submit" class="form-control form-control-sm btn-dark btn-sm">Abschicken</button>
-        </div>
-        {% csrf_token %}
-      </form>
+            action="{% url 'accounts:send_login_email' %}"
+          >
+            <div class="row">
+              <div class="col">
+                {{ login.email | add_classes:"form-control" | add_placeholder:"Email-Adresse" }}
+              </div>
+              <div class="col">
+                {{ login.identifier | add_classes:"form-control" | add_placeholder:"Matrikelnummer (falls TUM Student)" }}
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  class="form-control form-control btn-dark btn"
+                >
+                  Abschicken
+                </button>
+                <input type="hidden" name="next" value="{{ request.path }}">
+              </div>
+              {% csrf_token %}
+            </div>
+          </form>
 
-    {% endif %}
-    </div>
+          {% endif %}
+        </div>
       </div>
     </nav>
 
-{% if messages %}
-     {% for message in messages %}
-       {% if message.level_tag == 'success' %}
-      <div class="alert alert-success" role="alert" align="center">
-         <span class="text-success small">{{ message }}</span>
-      </div>
-       {% else %}
-      <div class="alert alert-danger" role="alert" align="center">
-         <span class="text-error small">{{ message }}</span>
-      </div>
-       {% endif %}
-     {% endfor %}
-{% endif %}
+    {% if messages %} 
+        {% for message in messages %} 
+            {% if message.level_tag == 'success' %}
+                <div class="alert alert-success" role="alert" align="center">
+                  <span class="text-success small">{{ message }}</span>
+                </div>
+                {% else %}
+                <div class="alert alert-danger" role="alert" align="center">
+                  <span class="text-error small">{{ message }}</span>
+                </div>
+            {% endif %} 
+        {% endfor %} 
+    {% endif %} 
 
+      {% if form.file.errors %}
+        <div class="alert alert-danger" role="alert" align="center">
+          {% for error in form.file.errors %}
+            <span class="text-danger small">{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
 
-    {% block statusbar %}{% endblock %}
+      {% if login.email.errors %}
+        <div class="alert alert-danger" role="alert" align="center">
+          {% for error in login.email.errors %}
+            <span class="text-danger small">{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if login.identifier.errors %}
+        <div class="alert alert-danger" role="alert" align="center">
+          {% for error in login.identifier.errors %}
+            <span class="text-danger small">{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
 
     <div class="container">
       <div class="jumbotron">

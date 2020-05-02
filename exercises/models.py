@@ -5,7 +5,6 @@ from django.urls import reverse
 from exercises.validators import FileValidator
 from django.utils.timezone import now
 from django.core.validators import MinValueValidator
-from accounts.models import User
 from django.conf import settings
 
 FILE_MIN_SIZE = 30

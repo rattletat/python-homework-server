@@ -75,20 +75,18 @@ nav h1 a[href] {
     color: white;
 }
 
-/* .nav a[href] { */
-/*     color: white; */
-/* } */
-
-/* .nav h1 { */
-/*     margin-left: auto; */
-/*     margin-right: auto; */
-/*     margin-top: 0px; */
-/*     font-size: 3vw; */
-/* } */
-
 .jumbotron {
     padding-top: 10px;
     padding-bottom: 10px;
     font-family: Quicksand;
     font-size: 20px;
+}
+
+/* Hide arrows from number field */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
 }

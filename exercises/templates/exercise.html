@@ -3,15 +3,6 @@
 
 {% block sub_header_text%}Programmieraufgabe {{ exercise.number }}{% endblock %}
 
-{% block statusbar %}
-  {% if form.file.errors %}
-    <div class="alert alert-danger" role="alert" align="center">
-      {% for error in form.file.errors %}
-        <span class="text-danger small">{{ error }}</span>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endblock %}
 
 {% block jumbotron_text %}
 <span id="id_description">
@@ -56,5 +47,7 @@
     <button type="submit" class="btn btn-primary">Abschicken</button>
   </div>
 </form>
+{% else %}
+<h4>Du musst dich erst anmelden um eine Abgabe zu erstellen!</h4>
 {% endif %}
 {% endblock %}
