@@ -98,11 +98,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "accounts.User"
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
         "accounts.authentication.PasswordlessAuthenticationBackend",
         "django.contrib.auth.backends.ModelBackend",
-)
-LOGOUT_REDIRECT_URL = 'home'
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

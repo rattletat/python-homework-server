@@ -19,7 +19,7 @@
         Eingeloggt als {{ user.email }} (TUM-extern)
     </li>
     {% endif %}
-    <li><a href="{% url "accounts:logout" %}">Ausloggen</a></li>
+    <li><a href="{% url "accounts:logout" %}?next={{ request.path | urlencode }}">Ausloggen</a></li>
 </ul>
 {% else %}
 <span class="text-dark medium">Du bist derzeit nicht angemeldet und kannst keine Abgaben erstellen. <a href="{% url "home" %}">Melde dich an.</a></span>
@@ -31,7 +31,7 @@
 <tbody>
 <tr id="highscore">
   <td>Dein Highscore:</td>
-  <td>0</td>
+  <td>0% (0 von 50 Tests bestanden)</td>
 </tr>
 <tr id="id_status">
   <td>Status:</td>
@@ -68,22 +68,20 @@
 </div>
 {% elif user.is_authenticated %}
 <form
-       action="{% url "exercises:view_exercise" exercise.number %}"
-       method="POST"
-       enctype="multipart/form-data"
-       align="center"
-       >
-       {% csrf_token %}
-       <div class="form-group file">
-           <span class="alert alert-secondary" role="alert">
-               <label class="control-label">Hier die Datei auswählen: </label>
-               {{ form.file }}
-           </span>
-       </div>
-       <div class="form-group">
-           <br />
-           <button type="submit" class="form-control form-control btn-dark btn">Abschicken</button>
-       </div>
+         action="{% url "exercises:view_exercise" exercise.number %}"
+         method="POST"
+         enctype="multipart/form-data"
+         align="center"
+         >
+         {% csrf_token %}
+         <div class="form-group file">
+             <span class="alert alert-secondary" role="alert">
+                 <label class="control-label">Hier die Datei auswählen: </label>
+                 {{ form.file }}
+             </span>
+         </div>
+         <button type="submit" style="width:auto" class="form-control btn btn-dark">Abschicken</button>
 </form>
+<br>
 {% endif %}
 {% endblock %}

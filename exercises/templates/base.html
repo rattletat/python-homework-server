@@ -30,11 +30,11 @@
       {% for message in messages %} 
       {% if message.level_tag == 'success' %}
       <div class="alert alert-success" role="alert" align="center">
-          <span class="text-success small">{{ message }}</span>
+          <span class="text-success">{{ message }}</span>
       </div>
       {% else %}
       <div class="alert alert-danger" role="alert" align="center">
-          <span class="text-error small">{{ message }}</span>
+          <span class="text-error">{{ message }}</span>
       </div>
       {% endif %} 
       {% endfor %} 
@@ -55,7 +55,7 @@
           <center>
               Probleme mit der Seite oder der Abgabe?
               <a href="https://pfefferlabprojects.slack.com/archives/D011QHWLNNP">
-                  Schreib mich bei Slack an.
+                  Schreibt mich bei Slack an.
               </a>
           </center>
       </div>

@@ -14,7 +14,7 @@
         Eingeloggt als {{ user.email }} (TUM-extern)
     </li>
     {% endif %}
-    <li><a href="{% url "accounts:logout" %}">Ausloggen</a></li>
+    <li><a href="{% url "accounts:logout" %}?next={{ request.path | urlencode }}">Ausloggen</a></li>
 </ul>
 {% else %}
 <form class="navbar-form" method="POST" action="{% url "accounts:send_login_email" %}" >
@@ -26,7 +26,7 @@
         {{ login.identifier | add_classes:"form-control" | add_placeholder:"Matrikelnummer (falls TUM Student)" }}
     </div>
     <div class="col">
-        <button type="submit" class="form-control form-control btn-dark btn" >
+        <button type="submit" class="form-control btn-dark btn" >
             Abschicken
         </button>
     </div>
@@ -50,7 +50,7 @@ Willkommen auf der offiziellen Übungseite der Vorlesung <strong>Programmieren f
 
 {% block C %}
   {% if exercises|length >= 1 %}
-    <h4>Programmieraufgaben:</h4>
+    <h4>Programmieraufgaben</h4>
   {% else %}
     <h4>Keine Programmieraufgaben!</h4>
   {% endif %}

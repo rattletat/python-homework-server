@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from exercises.models import Exercise
+from exercises.models import Exercise, Submission
 from exercises.forms import SubmissionForm
 from accounts.forms import LoginForm
+
+UPLOAD_SUCCESS = "Abgabe erfolgreich hochgeladen!"
 
 
 def home_page(request):
     exercises = Exercise.objects.all()
-    login = request.POST.get('login', LoginForm())
+    login = request.POST.get("login", LoginForm())
     return render(request, "home.html", {"exercises": exercises, "login": login})
 
 
@@ -15,20 +17,19 @@ def view_exercise(request, number):
     try:
         exercise = Exercise.objects.get(number=number)
     except Exercise.DoesNotExist:
-        return redirect(home_page)
+        return redirect("home")
 
     if not exercise.released():
-        return redirect(home_page)
+        return redirect("home")
 
-    form = SubmissionForm()
-    if not exercise.expired and request.method == "POST":
-        form = SubmissionForm(request.POST, request.FILES)
+    form = SubmissionForm()  # Move later
+    if request.method == "POST":
+        submission = Submission(exercise=exercise, user=request.user)
+        form = SubmissionForm(request.POST, request.FILES, instance=submission)
 
         if form.is_valid():
-            form.save(request.user, exercise)
-            messages.success(
-                request, "Abgabe erfolgreich hochgeladen!"
-            )
+            form.save()
+            messages.success(request, UPLOAD_SUCCESS)
             return redirect(exercise)
         else:
             for error in form.errors.values():

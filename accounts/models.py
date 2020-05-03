@@ -35,7 +35,6 @@ class MyUserManager(BaseUserManager):
     def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("is_active", True)
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError("Superuser must have is_staff=True.")
@@ -45,9 +44,11 @@ class MyUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(unique=True, validators=[EmailValidator(code="invalid")])
+    email = models.EmailField(
+        primary_key=True, unique=True, validators=[EmailValidator(code="invalid")]
+    )
     email_verified = models.BooleanField(default=False)
+    uid = models.UUIDField(default=uuid.uuid4, editable=False)
     password = models.CharField(max_length=20, default="", editable=False)
     identifier = models.IntegerField(
         default=None,
@@ -63,25 +64,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         "staff status",
         default=False,
-        help_text="Designates whether the user can log into this site.",
-    )
-    is_active = models.BooleanField(
-        "active",
-        default=True,
-        help_text=(
-            "Designates whether this user should be treated as active. "
-            "Unselect this instead of deleting accounts."
-        ),
     )
 
     def __str__(self):
-        return self.email
-
-    def get_full_name(self):
         if self.identifier:
-            return f"{self.email} ({self.identifier})"
+            return f"{self.email} (TUM Student: {self.identifier})"
         else:
-            return f"{self.email} (extern)"
-
-    def get_short_name(self):
-        return self.email
+            return f"{self.email} (TUM extern)"
