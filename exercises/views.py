@@ -22,7 +22,6 @@ def view_exercise(request, number):
     if not exercise.released():
         return redirect("home")
 
-    form = SubmissionForm()  # Move later
     if request.method == "POST":
         submission = Submission(exercise=exercise, user=request.user)
         form = SubmissionForm(request.POST, request.FILES, instance=submission)
@@ -35,5 +34,5 @@ def view_exercise(request, number):
             for error in form.errors.values():
                 messages.error(request, error[0])
 
-    context = {"exercise": exercise, "form": form}
+    context = {"exercise": exercise, "form": SubmissionForm()}
     return render(request, "exercise.html", context)
