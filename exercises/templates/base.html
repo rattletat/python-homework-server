@@ -15,17 +15,17 @@
 
   <body>
       <nav class="bg-dark">
+          <script type="text/javascript" src="{% static "exercises/js/fitty.min.js" %}"></script>
           <div class="container">
               <h1><a id="header" href="/">Programmieren fuer Sozialwissenschaftler*innen</a></h1>
           </div>
-          <script type="text/javascript" src="{% static "exercises/js/fitty.min.js" %}"></script>
-          <script>fitty('#header');</script>
           <div class="alert alert-dark" role="alert" align="center">
               <div class="container">
                   {% block login %}{% endblock %}
               </div>
           </div>
       </nav>
+      <script>fitty('#header');</script>
       {% if messages %} 
       {% for message in messages %} 
       {% if message.level_tag == 'success' %}

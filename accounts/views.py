@@ -7,10 +7,7 @@ from accounts.forms import LoginForm
 from exercises.models import Exercise
 from accounts.utils import send_email
 
-MAIL_FAILURE = (
-    "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten. "
-    "Bitte kontaktiere Michael Brauweiler bei Slack."
-)
+MAIL_FAILURE = "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten."
 MAIL_SUCCESS = "Dein Login Link ist soeben in deinem Email Postfach angekommen."
 NO_SUCH_USER = "Dieser Nutzer existiert nicht!"
 
@@ -47,4 +44,4 @@ def login(request):
         else:
             messages.error(request, NO_SUCH_USER)
 
-    return redirect('home')
+    return redirect("home")
