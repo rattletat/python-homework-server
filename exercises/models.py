@@ -10,7 +10,7 @@ from exercises.storage import OverwriteStorage
 from exercises.validators import FileValidator
 
 FILE_MIN_SIZE = 30
-FILE_MAX_SIZE = 3000
+FILE_MAX_SIZE = 4000
 
 
 class Exercise(models.Model):

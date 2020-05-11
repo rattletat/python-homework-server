@@ -41,8 +41,6 @@ def main():
         runs = result.testsRun
         errors = map(lambda x: f"{x[0]}\n{x[1]}", result.errors)
         failures = map(lambda x: f"{x[0]}\n{x[1]}", result.failures)
-        print(errors)
-        print(failures)
 
     print(
         metasep
