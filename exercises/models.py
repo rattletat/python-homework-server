@@ -90,6 +90,9 @@ class Submission(models.Model):
         ],
     )
 
+    def __str__(self):
+        return f"Submission on Exercise {self.exercise.number} by {self.user}"
+
     class Meta:
         unique_together = (
             "file_hash",
@@ -109,6 +112,11 @@ class TestResult(models.Model):
     class Meta:
         ordering = ("-processed",)
 
+    def __str__(self):
+        return (
+            f"TestResult ({self.success_count}/{self.test_count}) of {self.submission}"
+        )
+
 
 class TestMessage(models.Model):
     test = models.ForeignKey(TestResult, on_delete=models.CASCADE, editable=False)
@@ -119,3 +127,6 @@ class TestMessage(models.Model):
         max_length=8,
         editable=False,
     )
+
+    def __str__(self):
+        return f"TestMessage ({self.kind}) of {self.test}"
