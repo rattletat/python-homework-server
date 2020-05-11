@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -55,6 +56,9 @@ class Exercise(models.Model):
             return self.deadline < now()
         else:
             return False
+
+    # description_download.short_description = 'Download Fieldname'
+    # tests_download.short_description = 'Download Tests'
 
     def __str__(self):
         return f"Programmieraufgabe {self.number}: {self.short_name}"

@@ -9,7 +9,7 @@ EXTENSIONS = ["fenced_code", "codehilite", "tables", "smarty", "markdown_katex"]
 
 @register.filter()
 def mdfile2html(mdfile):
-    with open(mdfile, "r") as f:
+    with open(mdfile, "r", encoding="utf-8") as f:
         description = f.read()
 
     return md.markdown(description, extensions=EXTENSIONS)
