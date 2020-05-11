@@ -81,6 +81,22 @@ d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
 category = "main"
+description = "Python package for providing Mozilla's CA Bundle."
+name = "certifi"
+optional = false
+python-versions = "*"
+version = "2020.4.5.1"
+
+[[package]]
+category = "main"
+description = "Universal encoding detector for Python 2 and 3"
+name = "chardet"
+optional = false
+python-versions = "*"
+version = "3.0.4"
+
+[[package]]
+category = "main"
 description = "Composable command line interface toolkit"
 name = "click"
 optional = false
@@ -125,6 +141,56 @@ argon2 = ["argon2-cffi (>=16.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+category = "main"
+description = "Full featured redis cache backend for Django."
+name = "django-redis"
+optional = false
+python-versions = ">=3.5"
+version = "4.11.0"
+
+[package.dependencies]
+Django = ">=1.11"
+redis = ">=2.10.0"
+
+[[package]]
+category = "main"
+description = "An app that provides django integration for RQ (Redis Queue)"
+name = "django-rq"
+optional = false
+python-versions = "*"
+version = "2.3.1"
+
+[package.dependencies]
+django = ">=2.0"
+redis = ">=3"
+rq = ">=1.2"
+
+[package.extras]
+Sentry = ["raven (>=6.1.0)"]
+testing = ["mock (>=2.0.0)"]
+
+[[package]]
+category = "main"
+description = "A Python library for the Docker Engine API."
+name = "docker"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "4.2.0"
+
+[package.dependencies]
+requests = ">=2.14.2,<2.18.0 || >2.18.0"
+six = ">=1.4.0"
+websocket-client = ">=0.32.0"
+
+[package.dependencies.pypiwin32]
+python = ">=3.6"
+version = "223"
+
+[package.extras]
+ssh = ["paramiko (>=2.4.2)"]
+tls = ["pyOpenSSL (>=17.5.0)", "cryptography (>=1.3.4)", "idna (>=2.0.0)"]
+
+[[package]]
 category = "dev"
 description = "Discover and load entry points from installed packages."
 name = "entrypoints"
@@ -162,6 +228,14 @@ eventlet = ["eventlet (>=0.9.7)"]
 gevent = ["gevent (>=0.13)"]
 setproctitle = ["setproctitle"]
 tornado = ["tornado (>=0.2)"]
+
+[[package]]
+category = "main"
+description = "Internationalized Domain Names in Applications (IDNA)"
+name = "idna"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.9"
 
 [[package]]
 category = "dev"
@@ -301,6 +375,18 @@ mccabe = ">=0.6,<0.7"
 
 [[package]]
 category = "main"
+description = ""
+marker = "sys_platform == \"win32\" and python_version >= \"3.6\""
+name = "pypiwin32"
+optional = false
+python-versions = "*"
+version = "223"
+
+[package.dependencies]
+pywin32 = ">=223"
+
+[[package]]
+category = "main"
 description = "File type identification using libmagic"
 name = "python-magic"
 optional = false
@@ -316,12 +402,62 @@ python-versions = "*"
 version = "2019.3"
 
 [[package]]
+category = "main"
+description = "Python for Window Extensions"
+marker = "sys_platform == \"win32\" and python_version >= \"3.6\""
+name = "pywin32"
+optional = false
+python-versions = "*"
+version = "227"
+
+[[package]]
+category = "main"
+description = "Python client for Redis key-value store"
+name = "redis"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "3.5.0"
+
+[package.extras]
+hiredis = ["hiredis (>=0.1.3)"]
+
+[[package]]
 category = "dev"
 description = "Alternative regular expression module, to replace re."
 name = "regex"
 optional = false
 python-versions = "*"
 version = "2020.4.4"
+
+[[package]]
+category = "main"
+description = "Python HTTP for Humans."
+name = "requests"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "2.23.0"
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+chardet = ">=3.0.2,<4"
+idna = ">=2.5,<3"
+urllib3 = ">=1.21.1,<1.25.0 || >1.25.0,<1.25.1 || >1.25.1,<1.26"
+
+[package.extras]
+security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
+socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7)", "win-inet-pton"]
+
+[[package]]
+category = "main"
+description = "RQ is a simple, lightweight, library for creating background jobs, and processing them."
+name = "rq"
+optional = false
+python-versions = ">=2.7"
+version = "1.3.0"
+
+[package.dependencies]
+click = ">=5.0"
+redis = ">=3.0.0"
 
 [[package]]
 category = "dev"
@@ -367,7 +503,7 @@ python-versions = "*"
 version = "1.4.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 name = "urllib3"
 optional = false
@@ -380,6 +516,17 @@ secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "pyOpenSSL (>=0
 socks = ["PySocks (>=1.5.6,<1.5.7 || >1.5.7,<2.0)"]
 
 [[package]]
+category = "main"
+description = "WebSocket client for Python. hybi13 is supported."
+name = "websocket-client"
+optional = false
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "0.57.0"
+
+[package.dependencies]
+six = "*"
+
+[[package]]
 category = "dev"
 description = "Module for decorators, wrappers and monkey patching."
 name = "wrapt"
@@ -388,7 +535,7 @@ python-versions = "*"
 version = "1.11.2"
 
 [metadata]
-content-hash = "7a9f435ed734627b003a2847a1bf3b5ceab699b7debf2b63a2cf2c2905a74f46"
+content-hash = "d4a843cb46300ab7413cd6adf646080e32ca71ddeb13b155e5f8ae56c42287c1"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -415,6 +562,14 @@ black = [
     {file = "black-19.10b0-py36-none-any.whl", hash = "sha256:1b30e59be925fafc1ee4565e5e08abef6b03fe455102883820fe5ee2e4734e0b"},
     {file = "black-19.10b0.tar.gz", hash = "sha256:c2edb73a08e9e0e6f65a0e6af18b059b8b1cdd5bef997d7a0b181df93dc81539"},
 ]
+certifi = [
+    {file = "certifi-2020.4.5.1-py2.py3-none-any.whl", hash = "sha256:1d987a998c75633c40847cc966fcf5904906c920a7f17ef374f5aa4282abd304"},
+    {file = "certifi-2020.4.5.1.tar.gz", hash = "sha256:51fcb31174be6e6664c5f69e3e1691a2d72a1a12e90f872cbdb1567eb47b6519"},
+]
+chardet = [
+    {file = "chardet-3.0.4-py2.py3-none-any.whl", hash = "sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691"},
+    {file = "chardet-3.0.4.tar.gz", hash = "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"},
+]
 click = [
     {file = "click-7.1.2-py2.py3-none-any.whl", hash = "sha256:dacca89f4bfadd5de3d7489b7c8a566eee0d3676333fbb50030263894c38c0dc"},
     {file = "click-7.1.2.tar.gz", hash = "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a"},
@@ -431,6 +586,18 @@ django = [
     {file = "Django-3.0.5-py3-none-any.whl", hash = "sha256:642d8eceab321ca743ae71e0f985ff8fdca59f07aab3a9fb362c617d23e33a76"},
     {file = "Django-3.0.5.tar.gz", hash = "sha256:d4666c2edefa38c5ede0ec1655424c56dc47ceb04b6d8d62a7eac09db89545c1"},
 ]
+django-redis = [
+    {file = "django-redis-4.11.0.tar.gz", hash = "sha256:a5b1e3ffd3198735e6c529d9bdf38ca3fcb3155515249b98dc4d966b8ddf9d2b"},
+    {file = "django_redis-4.11.0-py3-none-any.whl", hash = "sha256:e1aad4cc5bd743d8d0b13d5cae0cef5410eaace33e83bff5fc3a139ad8db50b4"},
+]
+django-rq = [
+    {file = "django-rq-2.3.1.tar.gz", hash = "sha256:060bece17912c4188fc3166e79c8244dc0608fbacc68e1069a47ceb91759ffcf"},
+    {file = "django_rq-2.3.1-py2.py3-none-any.whl", hash = "sha256:70e4e4a6566c0c1449a2f08ad74865a2045d74659da63aeea66681015ae1bbdb"},
+]
+docker = [
+    {file = "docker-4.2.0-py2.py3-none-any.whl", hash = "sha256:1c2ddb7a047b2599d1faec00889561316c674f7099427b9c51e8cb804114b553"},
+    {file = "docker-4.2.0.tar.gz", hash = "sha256:ddae66620ab5f4bce769f64bcd7934f880c8abe6aa50986298db56735d0f722e"},
+]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
     {file = "entrypoints-0.3.tar.gz", hash = "sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"},
@@ -442,6 +609,10 @@ flake8 = [
 gunicorn = [
     {file = "gunicorn-20.0.4-py2.py3-none-any.whl", hash = "sha256:cd4a810dd51bf497552cf3f863b575dabd73d6ad6a91075b65936b151cbf4f9c"},
     {file = "gunicorn-20.0.4.tar.gz", hash = "sha256:1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626"},
+]
+idna = [
+    {file = "idna-2.9-py2.py3-none-any.whl", hash = "sha256:a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa"},
+    {file = "idna-2.9.tar.gz", hash = "sha256:7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb"},
 ]
 isort = [
     {file = "isort-4.3.21-py2.py3-none-any.whl", hash = "sha256:6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd"},
@@ -534,6 +705,10 @@ pylint = [
     {file = "pylint-2.4.4-py3-none-any.whl", hash = "sha256:886e6afc935ea2590b462664b161ca9a5e40168ea99e5300935f6591ad467df4"},
     {file = "pylint-2.4.4.tar.gz", hash = "sha256:3db5468ad013380e987410a8d6956226963aed94ecb5f9d3a28acca6d9ac36cd"},
 ]
+pypiwin32 = [
+    {file = "pypiwin32-223-py3-none-any.whl", hash = "sha256:67adf399debc1d5d14dffc1ab5acacb800da569754fafdc576b2a039485aa775"},
+    {file = "pypiwin32-223.tar.gz", hash = "sha256:71be40c1fbd28594214ecaecb58e7aa8b708eabfa0125c8a109ebd51edbd776a"},
+]
 python-magic = [
     {file = "python-magic-0.4.15.tar.gz", hash = "sha256:f3765c0f582d2dfc72c15f3b5a82aecfae9498bd29ca840d72f37d7bd38bfcd5"},
     {file = "python_magic-0.4.15-py2.py3-none-any.whl", hash = "sha256:f2674dcfad52ae6c49d4803fa027809540b130db1dec928cfbb9240316831375"},
@@ -541,6 +716,24 @@ python-magic = [
 pytz = [
     {file = "pytz-2019.3-py2.py3-none-any.whl", hash = "sha256:1c557d7d0e871de1f5ccd5833f60fb2550652da6be2693c1e02300743d21500d"},
     {file = "pytz-2019.3.tar.gz", hash = "sha256:b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be"},
+]
+pywin32 = [
+    {file = "pywin32-227-cp27-cp27m-win32.whl", hash = "sha256:371fcc39416d736401f0274dd64c2302728c9e034808e37381b5e1b22be4a6b0"},
+    {file = "pywin32-227-cp27-cp27m-win_amd64.whl", hash = "sha256:4cdad3e84191194ea6d0dd1b1b9bdda574ff563177d2adf2b4efec2a244fa116"},
+    {file = "pywin32-227-cp35-cp35m-win32.whl", hash = "sha256:f4c5be1a293bae0076d93c88f37ee8da68136744588bc5e2be2f299a34ceb7aa"},
+    {file = "pywin32-227-cp35-cp35m-win_amd64.whl", hash = "sha256:a929a4af626e530383a579431b70e512e736e9588106715215bf685a3ea508d4"},
+    {file = "pywin32-227-cp36-cp36m-win32.whl", hash = "sha256:300a2db938e98c3e7e2093e4491439e62287d0d493fe07cce110db070b54c0be"},
+    {file = "pywin32-227-cp36-cp36m-win_amd64.whl", hash = "sha256:9b31e009564fb95db160f154e2aa195ed66bcc4c058ed72850d047141b36f3a2"},
+    {file = "pywin32-227-cp37-cp37m-win32.whl", hash = "sha256:47a3c7551376a865dd8d095a98deba954a98f326c6fe3c72d8726ca6e6b15507"},
+    {file = "pywin32-227-cp37-cp37m-win_amd64.whl", hash = "sha256:31f88a89139cb2adc40f8f0e65ee56a8c585f629974f9e07622ba80199057511"},
+    {file = "pywin32-227-cp38-cp38-win32.whl", hash = "sha256:7f18199fbf29ca99dff10e1f09451582ae9e372a892ff03a28528a24d55875bc"},
+    {file = "pywin32-227-cp38-cp38-win_amd64.whl", hash = "sha256:7c1ae32c489dc012930787f06244426f8356e129184a02c25aef163917ce158e"},
+    {file = "pywin32-227-cp39-cp39-win32.whl", hash = "sha256:c054c52ba46e7eb6b7d7dfae4dbd987a1bb48ee86debe3f245a2884ece46e295"},
+    {file = "pywin32-227-cp39-cp39-win_amd64.whl", hash = "sha256:f27cec5e7f588c3d1051651830ecc00294f90728d19c3bf6916e6dba93ea357c"},
+]
+redis = [
+    {file = "redis-3.5.0-py2.py3-none-any.whl", hash = "sha256:174101a3ce04560d716616290bb40e0a2af45d5844c8bd474c23fc5c52e7a46a"},
+    {file = "redis-3.5.0.tar.gz", hash = "sha256:7378105cd8ea20c4edc49f028581e830c01ad5f00be851def0f4bc616a83cd89"},
 ]
 regex = [
     {file = "regex-2020.4.4-cp27-cp27m-win32.whl", hash = "sha256:90742c6ff121a9c5b261b9b215cb476eea97df98ea82037ec8ac95d1be7a034f"},
@@ -564,6 +757,14 @@ regex = [
     {file = "regex-2020.4.4-cp38-cp38-win32.whl", hash = "sha256:2a3bf8b48f8e37c3a40bb3f854bf0121c194e69a650b209628d951190b862de3"},
     {file = "regex-2020.4.4-cp38-cp38-win_amd64.whl", hash = "sha256:5bfed051dbff32fd8945eccca70f5e22b55e4148d2a8a45141a3b053d6455ae3"},
     {file = "regex-2020.4.4.tar.gz", hash = "sha256:295badf61a51add2d428a46b8580309c520d8b26e769868b922750cf3ce67142"},
+]
+requests = [
+    {file = "requests-2.23.0-py2.py3-none-any.whl", hash = "sha256:43999036bfa82904b6af1d99e4882b560e5e2c68e5c4b0aa03b655f3d7d73fee"},
+    {file = "requests-2.23.0.tar.gz", hash = "sha256:b3f43d496c6daba4493e7c431722aeb7dbc6288f52a6e04e7b6023b0247817e6"},
+]
+rq = [
+    {file = "rq-1.3.0-py2.py3-none-any.whl", hash = "sha256:c3e65a8ba5e59287308f23679f7fe729b9380531e4f6cdabb2dee99b82834811"},
+    {file = "rq-1.3.0.tar.gz", hash = "sha256:49c9149fa9301f98d918f3042f36bed4252d37193d222a1ce8b0e25886442377"},
 ]
 selenium = [
     {file = "selenium-3.141.0-py2.py3-none-any.whl", hash = "sha256:2d7131d7bc5a5b99a2d9b04aaf2612c411b03b8ca1b1ee8d3de5845a9be2cb3c"},
@@ -608,6 +809,10 @@ typed-ast = [
 urllib3 = [
     {file = "urllib3-1.25.9-py2.py3-none-any.whl", hash = "sha256:88206b0eb87e6d677d424843ac5209e3fb9d0190d0ee169599165ec25e9d9115"},
     {file = "urllib3-1.25.9.tar.gz", hash = "sha256:3018294ebefce6572a474f0604c2021e33b3fd8006ecd11d62107a5d2a963527"},
+]
+websocket-client = [
+    {file = "websocket_client-0.57.0-py2.py3-none-any.whl", hash = "sha256:0fc45c961324d79c781bab301359d5a1b00b13ad1b10415a4780229ef71a5549"},
+    {file = "websocket_client-0.57.0.tar.gz", hash = "sha256:d735b91d6d1692a6a181f2a8c9e0238e5f6373356f561bb9dc4c7af36f452010"},
 ]
 wrapt = [
     {file = "wrapt-1.11.2.tar.gz", hash = "sha256:565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1"},

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "exercises",
     "accounts",
+    "django_rq",
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        # 'ATOMIC_REQUESTS': True,
     }
 }
 
@@ -88,19 +90,22 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
+# LOGIN_URL = "/accounts/login_required"
+# LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 AUTH_USER_MODEL = "accounts.User"
 AUTHENTICATION_BACKENDS = [
-        "accounts.authentication.PasswordlessAuthenticationBackend",
-        "django.contrib.auth.backends.ModelBackend",
+    "accounts.authentication.PasswordlessAuthenticationBackend",
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 # Internationalization
@@ -123,9 +128,34 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
+MEDIA_URL = "/files/"
 
 EMAIL_HOST = "posteo.de"
 EMAIL_HOST_USER = "michael.brauweiler@posteo.net"
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# TASK QUEUE
+# Use redis for caches
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient",},
+    }
+}
+RQ_QUEUES = {
+    "default": {"USE_REDIS_CACHE": "default", "DEFAULT_TIMEOUT": 30},
+}
+
+RQ = {
+    "DEFAULT_RESULT_TTL": 0,
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+RQ_SHOW_ADMIN_LINK = True
+if DEBUG:
+    for queueConfig in RQ_QUEUES.values():
+        queueConfig["ASYNC"] = False

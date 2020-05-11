@@ -1,87 +1,62 @@
 {% extends 'base.html' %}
 {% load markdown_extras %}
 
-{% block sub_header_text%}Programmieraufgabe {{ exercise.number }}{% endblock %}
-
-{% block login %}
-{% if user.is_authenticated %}
-<ul class="nav navbar-nav">
-    {% if user.is_staff %}
-    <li class="navbar-text">
-        Eingeloggt als {{ user.email }} (Admin)
-    </li>
-    {% elif user.identifier %}
-    <li class="navbar-text">
-        Eingeloggt als {{ user.email }} (TUM-Student: {{ user.identifier }})
-    </li>
-    {% else %}
-    <li class="navbar-text">
-        Eingeloggt als {{ user.email }} (TUM-extern)
-    </li>
-    {% endif %}
-    <li><a href="{% url "accounts:logout" %}?next={{ request.path | urlencode }}">Ausloggen</a></li>
-</ul>
-{% else %}
-<span class="text-dark medium">Du bist derzeit nicht angemeldet und kannst keine Abgaben erstellen. <a href="{% url "home" %}">Melde dich an.</a></span>
-{% endif %}
-{% endblock %}
+{% block header%}Programmieraufgabe {{ exercise.number }}{% endblock %}
 
 {% block A %}
 <table class="table table-striped" id="exercises">
-<tbody>
-<tr id="highscore">
-  <td>Dein Highscore:</td>
-  <td>0% (0 von 50 Tests bestanden)</td>
-</tr>
-<tr id="id_status">
-  <td>Status:</td>
-  {% if exercise.expired %}
-  <td>Abgabe beendet!</td>
-  {% elif exercise.released %}
-  <td>Zur Abgabe bereit!</td>
-  {% else %}
-  <td>Nicht veröffentlicht!</td>
-  {% endif %}
-</tr>
-<tr id="deadline">
-  <td>Deadline:</td>
-  <td>{{ exercise.deadline }}</td>
-</tr>
+    <tbody>
+        <tr id="highscore">
+            <td>Dein Highscore:</td>
+            {% if not user.is_authenticated %}
+            <td>Du musst dich anmelden um deinen Highscore zu sehen! </td>
+            {% elif not result %}
+            {% if exercise.expired %}
+            <td>Du hast leider keine Abgabe erstellt!</td>
+            {% else %}
+            <td>Du musst erst eine Abgabe erstellen um deinen Highscore zu sehen!</td>
+            {% endif %}
+            {% else %}
+            <td><a href="{% url "exercises:view_results" exercise.number %}">{{ result.success_rate|floatformat }}%
+                    ({{ result.success_count }} von {{ result.test_count }} Tests bestanden)</a></td>
+            {% endif %}
+        </tr>
+        <tr id="id_status">
+            <td>Status:</td>
+            {% if exercise.expired %}
+            <td>Diese Programmieraufgabe ist abgelaufen!</td>
+
+            {% elif exercise.released %}
+            <td>Zur Abgabe bereit!</td>
+            {% else %}
+            <td>Diese Programmieraufgabe ist noch nicht zur Abgabe freigegeben!</td>
+            {% endif %}
+        </tr>
+        <tr id="deadline">
+            <td>Deadline:</td>
+            <td>{{ exercise.deadline }}</td>
+        </tr>
     </tbody>
 </table>
+<br>
+{% if exercise.released and not exercise.expired and user.is_authenticated %}
+<form action="{% url "exercises:view_exercise" exercise.number %}" method="POST" enctype="multipart/form-data"
+    align="center">
+    {% csrf_token %}
+    <div class="form-group file">
+        <span class="alert alert-secondary" role="alert">
+            <label class="control-label">Hier die Datei auswählen: </label>
+            {{ form.file }}
+        </span>
+    </div>
+    <button type="submit" style="width:auto" class="form-control btn btn-dark">Abschicken</button>
+</form>
+<br>
+{% endif %}
 {% endblock %}
 
 {% block B %}
 <span id="id_description">
-  {{ exercise.description | markdown | safe }}
+    {{ exercise.description.path | mdfile2html | safe }}
 </span>
-{% endblock %}
-
-{% block C %}
-{% if not exercise.released %}
-<div class="alert alert-dark" role="alert" align="center">
-    <span class="text-dark medium">Diese Programmieraufgabe ist noch nicht zur Abgabe freigegeben!</span>
-</div>
-{% elif exercise.expired %}
-<div class="alert alert-dark" role="alert" align="center">
-    <span class="text-dark medium">Diese Programmieraufgabe ist abgelaufen!</span>
-</div>
-{% elif user.is_authenticated %}
-<form
-         action="{% url "exercises:view_exercise" exercise.number %}"
-         method="POST"
-         enctype="multipart/form-data"
-         align="center"
-         >
-         {% csrf_token %}
-         <div class="form-group file">
-             <span class="alert alert-secondary" role="alert">
-                 <label class="control-label">Hier die Datei auswählen: </label>
-                 {{ form.file }}
-             </span>
-         </div>
-         <button type="submit" style="width:auto" class="form-control btn btn-dark">Abschicken</button>
-</form>
-<br>
-{% endif %}
 {% endblock %}

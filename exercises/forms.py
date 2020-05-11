@@ -1,8 +1,8 @@
 from django import forms
-from .utils import generate_sha1
 from django.core.exceptions import ValidationError
-from exercises.models import Submission
-from exercises.models import FILE_MIN_SIZE, FILE_MAX_SIZE
+
+from exercises.helper import generate_sha1
+from exercises.models import FILE_MAX_SIZE, FILE_MIN_SIZE, Submission
 
 REQUIRED_ERROR = "Du musst eine Datei hochladen!"
 EXTENSION_ERROR = "Deine Datei muss eine .py Dateiendung haben!"

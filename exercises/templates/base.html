@@ -1,64 +1,100 @@
 {% load static %}
+{% load form_widgets %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scaie=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scaie=1, shrink-to-fit=no" />
     <title>Programmieren fuer Sozialwissenschaftler*innen</title>
-    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/code.css" %}"> 
-    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/bootstrap/css/bootstrap.min.css" %}"> 
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/code.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "exercises/css/bootstrap/css/bootstrap.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "exercises/css/base.css" %}">
-  </head>
+</head>
 
-  <body>
-      <nav class="bg-dark">
-          <div class="container">
-              <h1><a id="header" href="/">Programmieren fuer Sozialwissenschaftler*innen</a></h1>
-          </div>
-          <div class="alert alert-dark" role="alert" align="center">
-              <div class="container">
-                  {% block login %}{% endblock %}
-              </div>
-          </div>
-      </nav>
-      {% if messages %} 
-      {% for message in messages %} 
-      {% if message.level_tag == 'success' %}
-      <div class="alert alert-success" role="alert" align="center">
-          <span class="text-success">{{ message }}</span>
-      </div>
-      {% else %}
-      <div class="alert alert-danger" role="alert" align="center">
-          <span class="text-error">{{ message }}</span>
-      </div>
-      {% endif %} 
-      {% endfor %} 
-      {% endif %} 
+<body>
+    <nav class="bg-dark">
+        <div class="container">
+            <h1><a id="title" href="/">Programmieren fuer Sozialwissenschaftler*innen</a></h1>
+        </div>
+        <div class="alert alert-dark" role="alert" align="center">
+            <div class="container">
+                {% if user.is_authenticated %}
+                <ul class="nav navbar-nav">
+                    {% if user.is_staff %}
+                    <li class="navbar-text">
+                        Eingeloggt als {{ user.email }} (Admin)
+                    </li>
+                    {% elif user.identifier %}
+                    <li class="navbar-text">
+                        Eingeloggt als {{ user.email }} (TUM-Student: {{ user.identifier }})
+                    </li>
+                    {% else %}
+                    <li class="navbar-text">
+                        Eingeloggt als {{ user.email }} (TUM-extern)
+                    </li>
+                    {% endif %}
+                    <li><a href="{% url "accounts:logout" %}">Ausloggen</a></li>
+                </ul>
+                {% else %}
+                <form class="navbar-form" method="POST" action="{% url "accounts:send_login_email" %}">
+                    <div class="row">
+                        <div class="col">
+                            {{ login.email | add_classes:"form-control" | add_placeholder:"Email-Adresse" }}
+                        </div>
+                        <div class="col">
+                            {{ login.identifier | add_classes:"form-control" | add_placeholder:"Matrikelnummer (falls TUM Student)" }}
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="form-control btn-dark btn">
+                                Abschicken
+                            </button>
+                        </div>
+                        {% csrf_token %}
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level_tag == 'success' %}
+    <div class="alert alert-success" role="alert" align="center">
+        <span class="text-success">{{ message }}</span>
+    </div>
+    {% else %}
+    <div class="alert alert-danger" role="alert" align="center">
+        <span class="text-error">{{ message }}</span>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
 
-      <div class="container">
-          {% block A %}{% endblock %}
-          <div class="jumbotron">
-              <h2>{% block sub_header %}{% endblock %}</h2>
-              {% block B %}{% endblock %}
-          </div>
-          {% block C %}{% endblock %}
-          {% block D %}{% endblock %}
-          {% block E %}{% endblock %}
-      </div>
+    <div class="container">
+        <h1>{% block header %}{% endblock %}</h1>
+        <br>
+        {% block A %}{% endblock %}
+        <div class="jumbotron">
+            <h2>{% block sub_header %}{% endblock %}</h2>
+            {% block B %}{% endblock %}
+        </div>
+        {% block C %}{% endblock %}
+        {% block D %}{% endblock %}
+        {% block E %}{% endblock %}
+    </div>
 
-      <div class="alert alert-secondary" role="alert" align="center">
-          <center>
-              Probleme mit der Seite oder der Abgabe?
-              <a href="https://pfefferlabprojects.slack.com/archives/D011QHWLNNP">
-                  Schreibt mich bei Slack an.
-              </a>
-          </center>
-      </div>
+    <div class="alert alert-secondary" role="alert" align="center">
+        <center>
+            Probleme mit der Seite oder der Abgabe?
+            <a href="https://pfefferlabprojects.slack.com/archives/D011QHWLNNP">
+                Schreibt mich bei Slack an.
+            </a>
+        </center>
+    </div>
 
-  </body>
-  <script type="text/javascript" src="{% static "exercises/js/fitty.min.js" %}"></script>
-  <script>fitty('#header');</script>
+</body>
+<script type="text/javascript" src="{% static "exercises/js/fitty.min.js" %}"></script>
+<script>fitty('#title');</script>
+
 </html>

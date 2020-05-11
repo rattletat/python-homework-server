@@ -10,6 +10,7 @@ from accounts.utils import send_email
 MAIL_FAILURE = "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten."
 MAIL_SUCCESS = "Dein Login Link ist soeben in deinem Email Postfach angekommen."
 NO_SUCH_USER = "Dieser Nutzer existiert nicht!"
+LOGIN_REQUIRED = "Du musst dich erst anmelden, um auf diese Seite zu gelangen!"
 
 
 def send_login_email(request):

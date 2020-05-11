@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load stacktrace %}
+
+{% block sub_header %}Ergebnisse für Programmieraufgabe {{ exercise.number }}{% endblock %}
+
+{% block B %} 
+Hier werden alle Errors eurer letzten Abgaben angezeigt (syntaktische Fehler, Indexfehler etc.), jedoch jeweils nur ein Failure (funktionaler Fehler wegen falschem Output). Beachtet, dass die Abgaben manuell und automatisiert auf bloßes Abklappern der Test-Cases und auf Plagiate durchsucht werden. Neue Kommentare / Umbenennen von Variablen / Umstellen des Programmiercodes reicht im Allgemeinen nicht.
+{% endblock %}
+
+{% block D %}
+{% if results|length >= 1 %}
+<table class="table table-hover" id="exercises" data-pagination="true" data-pagination-h-align="left"
+    data-pagination-detail-h-align="right">
+    <thead class="thead-dark">
+        <tr align="center" id="table-header">
+            <th scope="col">Zeitpunkt</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Tests</th>
+            <th scope="col">Successes</th>
+            <th scope="col">Errors</th>
+            <th scope="col">Failures</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+        <tr class="table-secondary" align="center">
+            <td>{{ result.processed|time:"H:i" }}</td>
+            <td>{{ result.processed|date:"d. M Y" }}</td>
+            <td>{{ result.test_count }}</td>
+            <td>{{ result.success_count }}</td>
+            <td>{{ result.errors|length }}</td>
+            <td>{{ result.failures|length }}</td>
+            </td>
+        </tr>
+        {% for error in result.errors %}
+        <tr class="table-default" align="left" style="font-family:monospace;">
+            <td class="text-danger"> Error: </td>
+            <td colspan="5" align="left">{{ error.message | linebreaksbr | safe }}</td>
+        </tr>
+        {% endfor %}
+        {% if result.failures %}
+        <tr class="table-default" align="left" style="font-family:monospace;">
+            <td class="text-danger"> Failure: </td>
+            <td colspan="5" align="left">{{ result.failures.0.message | linebreaksbr | safe }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<h4>Noch keine Ergebnisse!</h4>
+<h5 style="color:secondary">Wenn du kürzlich etwas hochgeladen hast, musst du eventuell etwas warten und aktualisieren.
+</h5>
+{% endif %}
+{% endblock %}

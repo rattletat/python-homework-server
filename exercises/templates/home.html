@@ -1,46 +1,9 @@
 {% extends 'base.html' %}
-{% load form_widgets %}
-
-
-{% block login %}
-{% if user.is_authenticated %}
-<ul class="nav navbar-nav">
-    {% if user.identifier %}
-    <li class="navbar-text">
-        Eingeloggt als {{ user.email }} (Matrikelnummer: {{ user.identifier }})
-    </li>
-    {% else %}
-    <li class="navbar-text">
-        Eingeloggt als {{ user.email }} (TUM-extern)
-    </li>
-    {% endif %}
-    <li><a href="{% url "accounts:logout" %}?next={{ request.path | urlencode }}">Ausloggen</a></li>
-</ul>
-{% else %}
-<form class="navbar-form" method="POST" action="{% url "accounts:send_login_email" %}" >
-    <div class="row">
-        <div class="col">
-            {{ login.email | add_classes:"form-control" | add_placeholder:"Email-Adresse" }}
-        </div>
-    <div class="col">
-        {{ login.identifier | add_classes:"form-control" | add_placeholder:"Matrikelnummer (falls TUM Student)" }}
-    </div>
-    <div class="col">
-        <button type="submit" class="form-control btn-dark btn" >
-            Abschicken
-        </button>
-    </div>
-    {% csrf_token %}
-    </div>
-</form>
-{% endif %}
-{% endblock %}
-
 
 {% block sub_header %}Übungsseite{% endblock %}
 
 {% block B %}
-Willkommen auf der offiziellen Übungseite der Vorlesung <strong>Programmieren für Sozialwissenschaftler*innen</strong> im Sommersemester 2020!
+Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozialwissenschaftler*innen im Sommersemester 2020!
   <br><br>
   Auf dieser Seite findet ihr die Aufgabenbeschreibungen zu allen Übungsaufgaben. Zusätzlich könnt ihr hier eure bearbeiteten Aufgaben hochladen und automatisch testen lassen. Um Aufgaben abzugeben müsst ihr euch vorher mit eurer Email-Adresse anmelden. <br>
   <i><b>Wichtig:</b> TUM Studierende geben zusätzlich ihre TUM Matrikelnummer an.</i>
@@ -60,8 +23,9 @@ Willkommen auf der offiziellen Übungseite der Vorlesung <strong>Programmieren f
 <table class="table table-hover" id="exercises">
     <thead class="thead-dark">
         {% if exercises|length >= 1 %}
-        <tr align="center" id="table-header">
+        <tr id="table-header">
             <th scope="col">#</th>
+            <th scope="col">Name</th>
             <th scope="col">Startzeitpunkt</th>
             <th scope="col">Deadline</th>
             <th scope="col">Link</th>
@@ -71,8 +35,9 @@ Willkommen auf der offiziellen Übungseite der Vorlesung <strong>Programmieren f
     <tbody>
         {% for exercise in exercises %}
         {% if exercise.expired %}
-        <tr class="table-default" align="center" id_"id_expired_exercise">
-            <th scope="row">{{ exercise.number }}</th>
+        <tr class="table-default" id="id_expired_exercise">
+            <td scope="row">{{ exercise.number }}</td>
+            <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }}</td>
             <td><a href="{% url "exercises:view_exercise" exercise.number %}" id="id_exercise_{{ exercise.number }}">
@@ -81,8 +46,9 @@ Willkommen auf der offiziellen Übungseite der Vorlesung <strong>Programmieren f
             </td>
         </tr>
         {% elif exercise.released %}
-        <tr class="table-primary" align="center" id="id_active_exercise">
-            <th scope="row">{{ exercise.number }}</th>
+        <tr class="table-primary" id="id_active_exercise">
+            <td scope="row">{{ exercise.number }}</td>
+            <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }}</td>
             <td><a href="{% url "exercises:view_exercise" exercise.number %}" id="id_exercise_{{ exercise.number }}">
@@ -91,8 +57,9 @@ Willkommen auf der offiziellen Übungseite der Vorlesung <strong>Programmieren f
             </td>
         </tr>
         {% else %}
-        <tr class="table-secondary" align="center" id="id_waiting_exercise">
-            <th scope="row">{{ exercise.number }}</th>
+        <tr class="table-secondary" id="id_waiting_exercise">
+            <td scope="row">{{ exercise.number }}</td>
+            <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }} </td>
             <td><button type="button" class="btn btn-secondary btn-sm" disabled>Nicht gestartet</button></td>
