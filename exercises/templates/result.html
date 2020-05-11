@@ -37,7 +37,7 @@ Hier werden alle Errors eurer letzten Abgaben angezeigt (syntaktische Fehler, In
             <td class="text-danger"> Error: </td>
             <td colspan="5" align="left">{{ result.errors.0.message | linebreaksbr | safe }}</td>
         </tr>
-        {% endfor %}
+        {% endif %}
         {% if result.failures %}
         <tr class="table-default" align="left" style="font-family:monospace;">
             <td class="text-danger"> Failure: </td>
