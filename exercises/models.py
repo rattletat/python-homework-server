@@ -5,8 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
-from exercises.helper import (get_description_path, get_submission_path,
-                              get_tests_path)
+from exercises.helper import get_description_path, get_submission_path, get_tests_path
 from exercises.storage import OverwriteStorage
 from exercises.validators import FileValidator
 
@@ -74,8 +73,10 @@ class Exercise(models.Model):
 
 class Submission(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True, unique=True)
-    exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, editable=False
+    )
     file_hash = models.CharField(max_length=40, editable=False)
     file = models.FileField(
         upload_to=get_submission_path,
@@ -97,20 +98,24 @@ class Submission(models.Model):
 
 
 class TestResult(models.Model):
-    submission = models.OneToOneField(Submission, on_delete=models.CASCADE)
+    submission = models.OneToOneField(
+        Submission, on_delete=models.CASCADE, editable=False
+    )
     processed = models.DateTimeField(auto_now_add=True, unique=True)
-    job_id = models.CharField(max_length=128)
-    test_count = models.IntegerField()
-    success_count = models.IntegerField()
+    job_id = models.CharField(max_length=128, editable=False)
+    test_count = models.IntegerField(editable=False)
+    success_count = models.IntegerField(editable=False)
 
     class Meta:
         ordering = ("-processed",)
 
 
 class TestMessage(models.Model):
-    test = models.ForeignKey(TestResult, on_delete=models.CASCADE)
-    message = models.TextField(default=None)
+    test = models.ForeignKey(TestResult, on_delete=models.CASCADE, editable=False)
+    message = models.TextField(default=None, editable=False)
     # Errors are raised because of structural faults, failures due to functional faults
     kind = models.CharField(
-        choices=[("error", "Error"), ("failure", "Failure")], max_length=8
+        choices=[("error", "Error"), ("failure", "Failure")],
+        max_length=8,
+        editable=False,
     )

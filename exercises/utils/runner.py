@@ -39,16 +39,20 @@ def main():
         result = unittest.TextTestRunner(verbosity=0).run(suite)
 
         runs = result.testsRun
-        errors = list(map(lambda x: f"{x[0]}\n{x[1]}", result.errors))
-        failures = list(map(lambda x: f"{x[0]}\n{x[1]}", result.failures))
+        errors = map(lambda x: f"{x[0]}\n{x[1]}", result.errors)
+        failures = map(lambda x: f"{x[0]}\n{x[1]}", result.failures)
+        print(errors)
+        print(failures)
 
-    print(metasep, end="")
-    print(runs, end="")
-    print(metasep, end="")
-    print(sep.join(errors), end="")
-    print(metasep, end="")
-    print(sep.join(failures), end="")
-    print(metasep, end="")
+    print(
+        metasep
+        + str(runs)
+        + metasep
+        + sep.join(errors)
+        + metasep
+        + sep.join(failures)
+        + metasep
+    )
 
 
 if __name__ == "__main__":
