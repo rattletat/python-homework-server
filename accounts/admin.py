@@ -1,5 +1,19 @@
 from django.contrib import admin
 
-from .models import User
+from accounts.models import User
+from exercises.models import Submission
 
-admin.site.register(User)
+
+class SubmissionInline(admin.StackedInline):
+    model = Submission
+    show_change_link = True
+    readonly_fields = ("file", "exercise", "uploaded")
+
+
+class UserAdmin(admin.ModelAdmin):
+    inlines = [
+        SubmissionInline,
+    ]
+
+
+admin.site.register(User, UserAdmin)
