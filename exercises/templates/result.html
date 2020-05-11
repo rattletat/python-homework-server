@@ -32,10 +32,10 @@ Hier werden alle Errors eurer letzten Abgaben angezeigt (syntaktische Fehler, In
             <td>{{ result.failures|length }}</td>
             </td>
         </tr>
-        {% for error in result.errors %}
+        {% if result.errors %}
         <tr class="table-default" align="left" style="font-family:monospace;">
             <td class="text-danger"> Error: </td>
-            <td colspan="5" align="left">{{ error.message | linebreaksbr | safe }}</td>
+            <td colspan="5" align="left">{{ result.errors.0.message | linebreaksbr | safe }}</td>
         </tr>
         {% endfor %}
         {% if result.failures %}
