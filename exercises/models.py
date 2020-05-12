@@ -111,8 +111,8 @@ class TestResult(models.Model):
     job_id = models.CharField(max_length=128, editable=False)
     test_count = models.IntegerField(editable=False)
     success_count = models.IntegerField(editable=False)
-    first_error = models.TextField(blank=True)
-    first_failure = models.TextField(blank=True)
+    first_error = models.TextField(null=True, blank=True)
+    first_failure = models.TextField(null=True, blank=True)
 
     class Meta:
         ordering = ("-processed",)
