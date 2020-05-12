@@ -28,7 +28,9 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <th scope="col">Name</th>
             <th scope="col">Startzeitpunkt</th>
             <th scope="col">Deadline</th>
+            {% if user.is_authenticated %}
             <th scope="col">Punkte</th>
+            {% endif %}
             <th scope="col">Link</th>
         </tr>
         {% endif %}
@@ -41,7 +43,9 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }}</td>
+            {% if user.is_authenticated %}
             <td>{{ exercise.statistics.success_count }} / {{ exercise.statistics.test_count }}</td>
+            {% endif %}
             <td><a href="{% url "exercises:view_exercise" exercise.number %}" id="id_exercise_{{ exercise.number }}">
                     <button type="button" class="btn btn-outline-primary btn-sm">Zur Aufgabe</button>
                 </a>
@@ -53,8 +57,11 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }}</td>
+            {% if user.is_authenticated %}
             <td>{{ exercise.statistics.success_count }} / {{ exercise.statistics.test_count }}</td>
-            <td><a href="{% url "exercises:view_exercise" exercise.number %}" id="id_exercise_{{ exercise.number }}">
+            {% endif %}
+            <td>
+                <a href="{% url "exercises:view_exercise" exercise.number %}" id="id_exercise_{{ exercise.number }}">
                     <button type="button" class="btn btn-primary btn-sm">Zur Aufgabe</button>
                 </a>
             </td>
@@ -65,7 +72,9 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }} </td>
-            <td>0 / 50</td>
+            {% if user.is_authenticated %}
+            <td>{{ exercise.statistics.success_count }} / {{ exercise.statistics.test_count }}</td>
+            {% endif %}
             <td><button type="button" class="btn btn-secondary btn-sm" disabled>Nicht gestartet</button></td>
         </tr>
         {% endif %}
