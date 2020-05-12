@@ -40,6 +40,7 @@ class Exercise(models.Model):
             ),
         ],
     )
+    max_tests = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
 
     def get_absolute_url(self):
         return reverse("exercises:view_exercise", args=[self.number])

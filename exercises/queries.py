@@ -19,11 +19,11 @@ def get_user_test_statistics(user, exercise):
                 / Cast(F("test_count"), FloatField())
             )
             .values("success_rate", "test_count", "success_count")
-            .order_by("-success_rate")[0]
+            .order_by("-success_count")[0]
         )
     else:
         return {
             "success_rate": 0,
-            "test_count": 0,
+            "test_count": exercise.max_tests,
             "success_count": 0,
         }

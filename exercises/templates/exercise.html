@@ -24,7 +24,7 @@
             {% if user.is_authenticated and statistics %}
         <tr id="highscore">
             <td>Dein Highscore:</td>
-            <td>{{ statistics.success_rate|floatformat }}% ({{ statistics.success_count }} von {{ statistics.test_count }} Tests bestanden)</td>
+            <td>{{ statistics.success_rate|floatformat }}% ({{ statistics.success_count }} von {{ exercise.max_tests }} Tests bestanden)</td>
         </tr>
             {% endif %}
     </tbody>
