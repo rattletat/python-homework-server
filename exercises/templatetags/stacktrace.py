@@ -18,7 +18,7 @@ def beautify_error(error):
             mq = re.search(
                 r'self\.assert.+\(submission\.([^(]+\(.+\)), ".*"\)$', question_line
             )
-            me = re.search("'([^']*)' != '([^']*)'", error_line)
+            me = re.search("AssertionError: '?([^']*)'? != '?([^']*)'?$", error_line)
             return (
                 f"Aufruf: {mq.group(1)}\nFalsch: {me.group(1)}\nLösung: {me.group(2)}"
             )
