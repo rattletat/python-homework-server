@@ -2,8 +2,6 @@ from exercises.models import TestResult
 from django.db.models import FloatField, F
 from django.db.models.functions import Cast
 
-DEFAULT_TEST_NUMBER = 50
-
 
 def get_user_test_results(user, exercise):
     return TestResult.objects.filter(
@@ -26,6 +24,6 @@ def get_user_test_statistics(user, exercise):
     else:
         return {
             "success_rate": 0,
-            "test_count": DEFAULT_TEST_NUMBER,
+            "test_count": 0,
             "success_count": 0,
         }

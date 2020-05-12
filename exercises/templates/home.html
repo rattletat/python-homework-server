@@ -73,7 +73,7 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }} </td>
             {% if user.is_authenticated %}
-            <td>{{ exercise.statistics.success_count }} / {{ exercise.statistics.test_count }}</td>
+            <td></td>
             {% endif %}
             <td><button type="button" class="btn btn-secondary btn-sm" disabled>Nicht gestartet</button></td>
         </tr>

@@ -4,6 +4,9 @@ import re
 
 register = template.Library()
 
+QUESTION_REGEX = '.*self\.assert.+\(submission\.([^(]+\(.+\)), \"?[^"]+\"?\).*'
+ERROR_REGEX = "AssertionError: '?([^']+)'? != '?([^']+)'?"
+
 
 @register.filter()
 @stringfilter
@@ -15,14 +18,14 @@ def beautify_error(error):
 
     try:
         if "AssertionError" in error_line:
-            mq = re.search(
-                r'self\.assert.+\(submission\.([^(]+\(.+\)), ".*"\)$', question_line
-            )
-            me = re.search("AssertionError: '?([^']*)'? != '?([^']*)'?$", error_line)
+            mq = re.search(QUESTION_REGEX, question_line)
+            me = re.search(ERROR_REGEX, error_line)
             return (
-                f"Aufruf: {mq.group(1)}\nFalsch: {me.group(1)}\nLösung: {me.group(2)}"
+                f"Aufruf: {mq.group(1)}\n"
+                f"Falsch: {me.group(1)}\n"
+                f"Lösung: {me.group(2)}"
             )
     except AttributeError:
         pass
-    lines = "\n".join(lines[error_index - 2:])
+    lines = "\n".join(lines[error_index - 3:])
     return f"{lines}"
