@@ -72,11 +72,9 @@
     {% endif %}
 
     <div class="container">
-        <h1>{% block header %}{% endblock %}</h1>
-        <br>
         {% block A %}{% endblock %}
         <div class="jumbotron">
-            <h2>{% block sub_header %}{% endblock %}</h2>
+            <h1>{% block header %}{% endblock %}</h1>
             {% block B %}{% endblock %}
         </div>
         {% block C %}{% endblock %}

@@ -3,14 +3,15 @@ from django.db.models import FloatField, F
 from django.db.models.functions import Cast
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from exercises.models import Exercise, Submission, TestResult, TestMessage
+from exercises.models import Exercise, Submission
 from exercises.forms import SubmissionForm
 from accounts.forms import LoginForm
 from exercises.tasks import compute_test_result
 from exercises.queries import get_user_test_results
+from django.utils.html import format_html
 import django_rq
 
-UPLOAD_SUCCESS = "Abgabe erfolgreich hochgeladen! Das Ergebnis müsste bald auftauchen!"
+UPLOAD_SUCCESS = "Abgabe erfolgreich hochgeladen! Das Ergebnis müsste bald in <a href='{}'>deinen Ergebnissen</a> auftauchen!"
 
 
 def home_page(request):
@@ -35,7 +36,9 @@ def view_exercise(request, number):
         if form.is_valid():
             form.save()
             django_rq.enqueue(compute_test_result, submission)
-            messages.success(request, UPLOAD_SUCCESS)
+            messages.success(
+                request, format_html(UPLOAD_SUCCESS, exercise.get_result_url())
+            )
             return redirect(exercise)
         else:
             for error in form.errors.values():

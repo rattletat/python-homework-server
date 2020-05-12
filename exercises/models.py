@@ -44,6 +44,9 @@ class Exercise(models.Model):
     def get_absolute_url(self):
         return reverse("exercises:view_exercise", args=[self.number])
 
+    def get_result_url(self):
+        return reverse("exercises:view_results", args=[self.number])
+
     def released(self):
         if self.release:
             return self.release < now()
