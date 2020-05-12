@@ -52,9 +52,9 @@ def main():
         + sep
         + str(success_count)
         + sep
-        + error
+        + error.strip()
         + sep
-        + failure
+        + failure.strip()
         + sep
     )
 

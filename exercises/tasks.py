@@ -38,10 +38,10 @@ def compute_test_result(submission):
         volumes=volumes,
     )
     results = force_str(output).split(sep)
-    test_count = results[1].strip()
-    success_count = results[2].strip()
-    first_error = results[3].strip()
-    first_failure = results[4].strip()
+    test_count = results[1]
+    success_count = results[2]
+    first_error = results[3]
+    first_failure = results[4]
 
     TestResult.objects.create(
         job_id=job.id,
