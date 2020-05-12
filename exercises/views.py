@@ -19,8 +19,8 @@ def home_page(request):
     if request.user.is_authenticated:
         for exercise in exercises:
             exercise.statistics = get_user_test_statistics(request.user, exercise)
-    context['max_points'] = sum(exercise.statistics["test_count"] for exercise in exercises)
-    context['user_points'] = sum(exercise.statistics["success_count"] for exercise in exercises)
+        context['max_points'] = sum(exercise.statistics["test_count"] for exercise in exercises)
+        context['user_points'] = sum(exercise.statistics["success_count"] for exercise in exercises)
     return render(request, "home.html", context)
 
 
