@@ -85,7 +85,7 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
 
 {% block E %}
 {% if user.is_authenticated and exercises|length >= 1 %}
-<h5 class="text-secondary">Bisher wurden {{ user_points }} Punkte von insgesamt {{ max_points }} Punkten erreicht.</h5>
+<h5 class="text-secondary">Bisheriger Punktestand: {{ user_points }} P. von insgesamt {{ max_points }} P.</h5>
 {% endif %}
 {% endblock %}
 
