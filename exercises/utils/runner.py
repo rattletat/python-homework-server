@@ -26,7 +26,7 @@ def main():
     except SyntaxError as e:
         test_count = 1
         success_count = 0
-        error = '\n'.join(map(str, e, traceback.format_exc()))
+        error = str(e) + "\n" + str(traceback.format_exc())
         failure = ""
     else:
         suite = unittest.TestLoader().loadTestsFromModule(tests)
@@ -35,12 +35,14 @@ def main():
         test_count = result.testsRun
         success_count = test_count - len(result.errors) - len(result.failures)
         try:
-            error = '\n'.join(map(str, result.errors[0]))
+            first_error = result.errors[0]
+            error = str(first_error[0]) + '\n' + str(first_error[1])
         except IndexError:
             error = ""
 
         try:
-            failure = '\n'.join(map(str, result.failures[0]))
+            first_failure = result.failures[0]
+            failure = str(first_failure[0]) + '\n' + str(first_failure[1])
         except IndexError:
             failure = ""
 
