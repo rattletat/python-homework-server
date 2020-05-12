@@ -111,6 +111,8 @@ class TestResult(models.Model):
     job_id = models.CharField(max_length=128, editable=False)
     test_count = models.IntegerField(editable=False)
     success_count = models.IntegerField(editable=False)
+    first_error = models.TextField(blank=True)
+    first_failure = models.TextField(blank=True)
 
     class Meta:
         ordering = ("-processed",)
@@ -119,17 +121,3 @@ class TestResult(models.Model):
         return (
             f"TestResult ({self.success_count}/{self.test_count}) of {self.submission}"
         )
-
-
-class TestMessage(models.Model):
-    test = models.ForeignKey(TestResult, on_delete=models.CASCADE, editable=False)
-    message = models.TextField(default=None, editable=False)
-    # Errors are raised because of structural faults, failures due to functional faults
-    kind = models.CharField(
-        choices=[("error", "Error"), ("failure", "Failure")],
-        max_length=8,
-        editable=False,
-    )
-
-    def __str__(self):
-        return f"TestMessage ({self.kind}) of {self.test}"

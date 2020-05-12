@@ -8,7 +8,7 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
   Auf dieser Seite findet ihr die Aufgabenbeschreibungen zu allen Übungsaufgaben. Zusätzlich könnt ihr hier eure bearbeiteten Aufgaben hochladen und automatisch testen lassen. Um Aufgaben abzugeben müsst ihr euch vorher mit eurer Email-Adresse anmelden. <br>
   <i><b>Wichtig:</b> TUM Studierende geben zusätzlich ihre TUM Matrikelnummer an.</i>
   <br><br>
-  In der untenstehenden Tabelle sind alle Programmierübungen aufgelistet. Die blaumarkierte Zeile stellt dabei die derzeitige Aufgabe da, die ihr in dieser Woche bearbeiten sollt. Klickt auf den rechtsstehenden Button, um zu der Aufgabenstellung und Abgabe zu kommen.
+  In der untenstehenden Tabelle sind alle Programmierübungen aufgelistet. Die blaumarkierten Zeilen stellen dabei die derzeitig aktiven Aufgaben da, die ihr bearbeiten sollt.
 {% endblock %}
 
 {% block C %}
@@ -28,6 +28,7 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <th scope="col">Name</th>
             <th scope="col">Startzeitpunkt</th>
             <th scope="col">Deadline</th>
+            <th scope="col">Punkte</th>
             <th scope="col">Link</th>
         </tr>
         {% endif %}
@@ -40,6 +41,7 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }}</td>
+            <td>{{ exercise.statistics.success_count }} / {{ exercise.statistics.test_count }}</td>
             <td><a href="{% url "exercises:view_exercise" exercise.number %}" id="id_exercise_{{ exercise.number }}">
                     <button type="button" class="btn btn-outline-primary btn-sm">Zur Aufgabe</button>
                 </a>
@@ -51,6 +53,7 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }}</td>
+            <td>{{ exercise.statistics.success_count }} / {{ exercise.statistics.test_count }}</td>
             <td><a href="{% url "exercises:view_exercise" exercise.number %}" id="id_exercise_{{ exercise.number }}">
                     <button type="button" class="btn btn-primary btn-sm">Zur Aufgabe</button>
                 </a>
@@ -62,11 +65,18 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
             <td>{{ exercise.short_name }}</td>
             <td>{{ exercise.release }}</td>
             <td>{{ exercise.deadline }} </td>
+            <td>0 / 50</td>
             <td><button type="button" class="btn btn-secondary btn-sm" disabled>Nicht gestartet</button></td>
         </tr>
         {% endif %}
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block E %}
+{% if user.is_authenticated and exercises|length >= 1 %}
+<h5 class="text-secondary">Bisher wurden {{ user_points }} Punkte von insgesamt {{ max_points }} Punkten erreicht.</h5>
+{% endif %}
 {% endblock %}
 

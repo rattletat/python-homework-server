@@ -1,12 +1,31 @@
-from exercises.models import TestResult, TestMessage
+from exercises.models import TestResult
+from django.db.models import FloatField, F
+from django.db.models.functions import Cast
+
+DEFAULT_TEST_NUMBER = 50
 
 
-def get_user_test_results(user, exercise, add_messages=False):
-    tests = TestResult.objects.filter(
+def get_user_test_results(user, exercise):
+    return TestResult.objects.filter(
         submission__user=user, submission__exercise=exercise
     )
-    if add_messages:
-        for test in tests:
-            test.errors = TestMessage.objects.filter(kind="error", test=test)
-            test.failures = TestMessage.objects.filter(kind="failure", test=test)
-    return tests
+
+
+def get_user_test_statistics(user, exercise):
+    tests = get_user_test_results(user, exercise)
+    if tests:
+        return (
+            tests.exclude(test_count=0)
+            .annotate(
+                success_rate=Cast(F("success_count") * 100, FloatField())
+                / Cast(F("test_count"), FloatField())
+            )
+            .values("success_rate", "test_count", "success_count")
+            .order_by("-success_rate")[0]
+        )
+    else:
+        return {
+            "success_rate": 0,
+            "test_count": DEFAULT_TEST_NUMBER,
+            "success_count": 0,
+        }

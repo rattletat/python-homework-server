@@ -4,11 +4,15 @@
 {% block sub_header %}Ergebnisse für Programmieraufgabe {{ exercise.number }}{% endblock %}
 
 {% block B %} 
-Hier werden all deine Ergebnisse sowie - falls vorhanden - jeweils ein Error (syntaktischer Fehler, Indexfehler etc.) und ein Failure (funktionaler Fehler wegen falschem Output) angezeigt. Beachte, dass die Abgaben manuell und automatisiert auf bloßes Abklappern der Test-Cases und Plagiate durchsucht werden. Neue Kommentare / Umbenennen von Variablen / Umstellen des Programmiercodes reicht im Allgemeinen nicht aus.
+Hier werden all deine Ergebnisse angezeigt. 
+Falls vorhanden werden jeweils ein Error (syntaktischer Fehler, Indexfehler etc.) und ein Failure (funktionaler Fehler wegen falschem Output) angezeigt. 
+<br>
+<br>
+Beachte, dass die Abgaben manuell und automatisiert auf bloßes Abklappern der Test-Cases und Plagiate durchsucht werden. Neue Kommentare / Umbenennen von Variablen / Umstellen des Programmiercodes reicht im Allgemeinen nicht aus.
 {% endblock %}
 
 {% block D %}
-{% if results|length >= 1 %}
+{% if tests|length >= 1 %}
 <table class="table table-hover" id="exercises" data-pagination="true" data-pagination-h-align="left"
     data-pagination-detail-h-align="right">
     <thead class="thead-dark">
@@ -16,32 +20,28 @@ Hier werden all deine Ergebnisse sowie - falls vorhanden - jeweils ein Error (sy
             <th scope="col">Zeitpunkt</th>
             <th scope="col">Datum</th>
             <th scope="col">Tests</th>
-            <th scope="col">Successes</th>
-            <th scope="col">Errors</th>
-            <th scope="col">Failures</th>
+            <th scope="col">Erfolgreich</th>
         </tr>
     </thead>
     <tbody>
-        {% for result in results %}
+        {% for test in tests %}
         <tr class="table-secondary" align="center">
-            <td>{{ result.processed|time:"H:i" }}</td>
-            <td>{{ result.processed|date:"d. M Y" }}</td>
-            <td>{{ result.test_count }}</td>
-            <td>{{ result.success_count }}</td>
-            <td>{{ result.errors|length }}</td>
-            <td>{{ result.failures|length }}</td>
+            <td>{{ test.processed|time:"H:i" }}</td>
+            <td>{{ test.processed|date:"d. M Y" }}</td>
+            <td>{{ test.test_count }}</td>
+            <td>{{ test.success_count }}</td>
             </td>
         </tr>
-        {% if result.errors %}
-        <tr class="table-default" align="left" style="font-family:monospace;">
+        {% if test.first_error %}
+        <tr class="table-danger" align="left" style="font-family:monospace;">
             <td class="text-danger"> Error: </td>
-            <td colspan="5" align="left">{{ result.errors.0.message | linebreaksbr | safe }}</td>
+            <td colspan="5" align="left">{{ test.first_error|beautify_error|linebreaksbr }}</td>
         </tr>
         {% endif %}
-        {% if result.failures %}
-        <tr class="table-default" align="left" style="font-family:monospace;">
+        {% if test.first_failure %}
+        <tr class="table-danger" align="left" style="font-family:monospace;">
             <td class="text-danger"> Failure: </td>
-            <td colspan="5" align="left">{{ result.failures.0.message | linebreaksbr | safe }}</td>
+            <td colspan="5" align="left">{{ test.first_failure|beautify_error|linebreaksbr }}</td>
         </tr>
         {% endif %}
         {% endfor %}

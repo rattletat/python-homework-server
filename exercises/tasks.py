@@ -11,7 +11,7 @@ from exercises.config import (
     DOCKER_SECURITY_OPTIONS,
     DOCKER_SETUP_OPTIONS,
 )
-from exercises.models import TestResult, TestMessage
+from exercises.models import TestResult
 
 COMPUTE_ERROR = "Evaluierung fehlgeschlagen. Bitte benutze keine `print` statements in deiner Abgabe!"
 
@@ -29,27 +29,25 @@ def compute_test_result(submission):
         submission_path: {"bind": "/app/submission.py", "mode": "ro"},
     }
     sep = str(uuid.uuid4())
-    metasep = str(uuid.uuid4())
     client = docker.from_env()
     output = client.containers.run(
         DOCKER_IMAGE,
-        f"python runner.py {metasep} {sep}",
+        f"python runner.py {sep}",
         **DOCKER_SETUP_OPTIONS,
         **DOCKER_SECURITY_OPTIONS,
         volumes=volumes,
     )
-    results = force_str(output).split(metasep)
-    test_count = results[1].strip()
-    errors = list(filter(None, results[2].split(sep)))
-    failures = list(filter(None, results[3].split(sep)))
+    results = force_str(output).split(sep)
+    test_count = results[1]
+    success_count = results[2]
+    first_error = results[3]
+    first_failure = results[4]
 
-    test = TestResult.objects.create(
+    TestResult.objects.create(
         job_id=job.id,
         submission=submission,
         test_count=test_count,
-        success_count=int(test_count) - len(errors) - len(failures),
+        success_count=success_count,
+        first_error=first_error,
+        first_failure=first_failure,
     )
-    for error in errors:
-        TestMessage.objects.create(test=test, message=error.strip(), kind="error")
-    for failure in failures:
-        TestMessage.objects.create(test=test, message=failure.strip(), kind="failure")

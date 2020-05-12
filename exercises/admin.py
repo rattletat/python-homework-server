@@ -3,25 +3,11 @@ from django.utils.html import format_html
 from django.http import HttpResponse
 from django.shortcuts import reverse
 from django.conf.urls import url
-from .models import Exercise, Submission, TestResult, TestMessage
+from .models import Exercise, Submission, TestResult
 
 
 admin.site.register(Submission)
-
-
-class TestResultInline(admin.StackedInline):
-    model = TestMessage
-    show_change_link = True
-
-
-class TestResultAdmin(admin.ModelAdmin):
-    inlines = [
-        TestResultInline,
-    ]
-
-
-admin.site.register(TestMessage)
-admin.site.register(TestResult, TestResultAdmin)
+admin.site.register(TestResult)
 
 
 class ExerciseAdmin(admin.ModelAdmin):

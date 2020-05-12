@@ -3,21 +3,15 @@
 Runs the test suite and prints the results to standard output.
 It uses the given separator in the following way:
 
-<Meta-separator>
-#Test Run
-<Meta-separator>
-Error 1
 <Separator>
-...
+#Tests
 <Separator>
-Error N
-<Meta-separator>
-Failure 1
+#Succeeded Tests
 <Separator>
-...
+First Error
 <Separator>
-Failure M
-<Meta-separator>
+First Failure
+<Separator>
 """
 import unittest
 import traceback
@@ -25,32 +19,48 @@ import sys
 
 
 def main():
-    metasep = sys.argv[1]
-    sep = sys.argv[2]
+    sep = sys.argv[1]
 
     try:
         import tests
     except SyntaxError as e:
-        runs = 1
-        errors = [f"{e}\n{traceback.format_exc()}"]
-        failures = []
+        test_count = 1
+        success_count = 0
+        error = format_error((e, traceback.format_exc()))
+        failure = ""
     else:
         suite = unittest.TestLoader().loadTestsFromModule(tests)
         result = unittest.TextTestRunner(verbosity=0).run(suite)
 
-        runs = result.testsRun
-        errors = map(lambda x: f"{x[0]}\n{x[1]}", result.errors)
-        failures = map(lambda x: f"{x[0]}\n{x[1]}", result.failures)
+        test_count = result.testsRun
+        success_count = test_count - len(result.errors) - len(result.failures)
+        try:
+            error = format_error(result.errors[0])
+        except IndexError:
+            error = ""
+
+        try:
+            failure = format_error(result.failures[0])
+        except IndexError:
+            failure = ""
 
     print(
-        metasep
-        + str(runs)
-        + metasep
-        + sep.join(errors)
-        + metasep
-        + sep.join(failures)
-        + metasep
+        sep
+        + str(test_count)
+        + sep
+        + str(success_count)
+        + sep
+        + error
+        + sep
+        + failure
+        + sep
     )
+
+
+def format_error(error):
+    lines = error[1].split("\n")
+    index = [i for i, line in enumerate(lines) if "Error" in line][0]
+    return lines[index]
 
 
 if __name__ == "__main__":

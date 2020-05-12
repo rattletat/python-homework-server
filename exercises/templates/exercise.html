@@ -17,7 +17,7 @@
             <td>Du musst erst eine Abgabe erstellen um deinen Highscore zu sehen!</td>
             {% endif %}
             {% else %}
-            <td>{{ result.success_rate|floatformat }}% ({{ result.success_count }} von {{ result.test_count }} Tests bestanden)</td>
+            <td>{{ statistics.success_rate|floatformat }}% ({{ statistics.success_count }} von {{ statistics.test_count }} Tests bestanden)</td>
             {% endif %}
         </tr>
         <tr id="id_status">
@@ -48,8 +48,8 @@
             {{ form.file }}
         </span>
     </div>
-    <button type="submit" style="width:auto" class="form-control btn btn-dark">Abschicken</button>
     <a href="{% url "exercises:view_results" exercise.number %}"><button type="button" style="width:auto" class="form-control btn btn-dark">Ergebnisse</button></a>
+    <button type="submit" style="width:auto" class="form-control btn btn-dark">Abschicken</button>
 </form>
 <br>
 {% endif %}
