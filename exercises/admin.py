@@ -31,18 +31,24 @@ class ExerciseAdmin(admin.ModelAdmin):
         return urls
 
     def description_link(self, obj):
-        return format_html(
-            '<a href="{}">Download</a>',
-            reverse("admin:exercises_exercise_download-description", args=[obj.pk]),
-        )
+        if obj.pk:
+            return format_html(
+                '<a href="{}">Download</a>',
+                reverse("admin:exercises_exercise_download-description", args=[obj.pk]),
+            )
+        else:
+            return "Noch keine Datei hochgeladen!"
 
     description_link.short_description = "Download Description"
 
     def tests_link(self, obj):
-        return format_html(
-            '<a href="{}">Download</a>',
-            reverse("admin:exercises_exercise_download-tests", args=[obj.pk]),
-        )
+        if obj.pk:
+            return format_html(
+                '<a href="{}">Download</a>',
+                reverse("admin:exercises_exercise_download-tests", args=[obj.pk]),
+            )
+        else:
+            return "Noch keine Datei hochgeladen!"
 
     tests_link.short_description = "Download Tests"
 
