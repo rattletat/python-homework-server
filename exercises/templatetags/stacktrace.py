@@ -25,4 +25,4 @@ def beautify_error(error):
     except AttributeError:
         pass
     lines = "\n".join(lines[error_index - 2:])
-    return f"{lines.strip()}"
+    return f"{lines}"
