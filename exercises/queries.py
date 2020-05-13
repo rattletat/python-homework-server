@@ -21,7 +21,7 @@ def get_user_test_statistics(user, exercise):
         result["success_count"] = min(
             result["success_count"], exercise.max_tests
         )
-        result["success_rate"] = result["success_count"] / result["test_count"]
+        result["success_rate"] = (result["success_count"] * 100) / result["test_count"]
         return result
     else:
         return {
