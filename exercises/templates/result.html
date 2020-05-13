@@ -3,6 +3,13 @@
 
 {% block sub_header %}Ergebnisse für Programmieraufgabe {{ exercise.number }}{% endblock %}
 
+{% block A %}
+<div align="center">
+    <a href="{% url "exercises:view_exercise" exercise.number %}" class="btn btn-primary btn-sm">Zurück zur Aufgabe</a>
+    <a href="{{ request.path }}" class="btn btn-dark btn-sm">Aktualisieren</a>
+</div>
+{% endblock %}
+
 {% block B %} 
 Hier werden all deine Ergebnisse angezeigt. 
 Falls vorhanden werden jeweils ein Error (syntaktischer Fehler, Indexfehler etc.) und ein Failure (funktionaler Fehler wegen falschem Output) angezeigt. 
