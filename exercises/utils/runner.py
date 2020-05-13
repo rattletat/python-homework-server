@@ -23,7 +23,7 @@ def main():
 
     try:
         import tests
-    except SyntaxError as e:
+    except Exception as e:
         test_count = 1
         success_count = 0
         error = str(e) + "\n" + str(traceback.format_exc())

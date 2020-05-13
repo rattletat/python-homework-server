@@ -146,7 +146,7 @@ CACHES = {
     }
 }
 RQ_QUEUES = {
-    "default": {"USE_REDIS_CACHE": "default", "DEFAULT_TIMEOUT": 30},
+    "default": {"USE_REDIS_CACHE": "default", "DEFAULT_TIMEOUT": 10},
 }
 
 RQ = {
