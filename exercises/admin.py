@@ -11,8 +11,12 @@ admin.site.register(TestResult)
 
 
 class ExerciseAdmin(admin.ModelAdmin):
-    readonly_fields = ("description_link", "tests_link")
-    fields = [field.name for field in Exercise._meta.fields] + ["description_link", "tests_link"]
+    readonly_fields = ("description_link", "tests_link", "page_link")
+    fields = [field.name for field in Exercise._meta.fields] + [
+        "description_link",
+        "tests_link",
+        "page_link",
+    ]
 
     def get_urls(self):
         urls = super(ExerciseAdmin, self).get_urls()
@@ -34,7 +38,10 @@ class ExerciseAdmin(admin.ModelAdmin):
         if obj.pk:
             return format_html(
                 '<a href="{}">Download</a>',
-                reverse("admin:exercises_exercise_download-description", args=[obj.pk]),
+                reverse(
+                    "admin:exercises_exercise_download-description",
+                    args=[obj.pk],
+                ),
             )
         else:
             return "Noch keine Datei hochgeladen!"
@@ -45,7 +52,9 @@ class ExerciseAdmin(admin.ModelAdmin):
         if obj.pk:
             return format_html(
                 '<a href="{}">Download</a>',
-                reverse("admin:exercises_exercise_download-tests", args=[obj.pk]),
+                reverse(
+                    "admin:exercises_exercise_download-tests", args=[obj.pk]
+                ),
             )
         else:
             return "Noch keine Datei hochgeladen!"
@@ -54,7 +63,9 @@ class ExerciseAdmin(admin.ModelAdmin):
 
     def download_description(self, request, pk):
         response = HttpResponse(content_type="application/force-download")
-        response["Content-Disposition"] = 'attachment; filename="description.md"'
+        response[
+            "Content-Disposition"
+        ] = 'attachment; filename="description.md"'
         response.write(Exercise.objects.get(pk=pk).description.read())
         return response
 
@@ -63,6 +74,16 @@ class ExerciseAdmin(admin.ModelAdmin):
         response["Content-Disposition"] = 'attachment; filename="tests.py"'
         response.write(Exercise.objects.get(pk=pk).tests.read())
         return response
+
+    def page_link(self, obj):
+        if obj.pk:
+            return format_html(
+                '<a href="{}">Link</a>', obj.get_absolute_url(),
+            )
+        else:
+            return "Noch keine Datei hochgeladen!"
+
+    page_link.short_description = "Zu der Exercise Seite"
 
 
 admin.site.register(Exercise, ExerciseAdmin)

@@ -30,7 +30,7 @@ def view_exercise(request, number):
     except Exercise.DoesNotExist:
         return redirect("home")
 
-    if not exercise.released():
+    if not exercise.released() and not request.user.is_staff:
         return redirect("home")
 
     if request.method == "POST":
