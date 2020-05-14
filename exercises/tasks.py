@@ -32,7 +32,6 @@ def compute_test_result(submission):
     }
     resources = ExerciseResource.objects.filter(exercise=submission.exercise)
     for resource in resources:
-        print("HALLO " + str(resource))
         resource_path = settings.BASE_DIR + resource.file.url
         volumes[resource_path] = {
             "bind": "/app/" + os.path.basename(resource.file.name),

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
+import os
 from django.urls import reverse
 from django.utils.timezone import now
 
@@ -101,6 +102,17 @@ class ExerciseResource(models.Model):
         storage=OverwriteStorage(),
         upload_to=get_resources_path,
     )
+
+    def clean(self):
+        super().clean()
+
+        basename = os.path.basename(self.file.name)
+        reserved_files = ["runner.py", "submission.py", "tests.py"]
+        if basename in reserved_files:
+            raise ValidationError(
+                f"Die Datei darf nicht einen der folgenden Namen haben: {str(reserved_files)}!",
+                code="invalid_name",
+            )
 
 
 class Submission(models.Model):
