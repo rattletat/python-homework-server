@@ -7,13 +7,16 @@ from rq import get_current_job
 
 from exercises.config import (
     DOCKER_IMAGE,
+    DOCKER_TIMEOUT,
     DOCKER_RUNNER_PATH,
     DOCKER_SECURITY_OPTIONS,
     DOCKER_SETUP_OPTIONS,
 )
 from exercises.models import TestResult
 
-COMPUTE_ERROR = "Evaluierung fehlgeschlagen. Bitte benutze keine `print` statements in deiner Abgabe!"
+TIMEOUT_ERROR = (
+        "TimeoutError: Dein Programm hat zu lange gebraucht!"
+)
 
 
 def compute_test_result(submission):
@@ -30,24 +33,40 @@ def compute_test_result(submission):
     }
     sep = str(uuid.uuid4())
     client = docker.from_env()
-    output = client.containers.run(
-        DOCKER_IMAGE,
-        f"python runner.py {sep}",
-        **DOCKER_SETUP_OPTIONS,
-        **DOCKER_SECURITY_OPTIONS,
-        volumes=volumes,
-    )
-    results = force_str(output).split(sep)
-    test_count = results[1]
-    success_count = results[2]
-    first_error = results[3]
-    first_failure = results[4]
+    try:
+        container = client.containers.run(
+            DOCKER_IMAGE,
+            f"python runner.py {sep}",
+            **DOCKER_SETUP_OPTIONS,
+            **DOCKER_SECURITY_OPTIONS,
+            volumes=volumes,
+            detach=True,
+        )
+        container.wait(timeout=DOCKER_TIMEOUT)
+    except Exception as e:
+        TestResult.objects.create(
+            job_id=job.id,
+            submission=submission,
+            test_count=1,
+            success_count=0,
+            first_error=TIMEOUT_ERROR + "\n" + str(e),
+        )
+    else:
+        output = container.logs()
+        results = force_str(output).split(sep)
 
-    TestResult.objects.create(
-        job_id=job.id,
-        submission=submission,
-        test_count=test_count,
-        success_count=success_count,
-        first_error=first_error,
-        first_failure=first_failure,
-    )
+        test_count = results[1]
+        success_count = results[2]
+        first_error = results[3]
+        first_failure = results[4]
+
+        TestResult.objects.create(
+            job_id=job.id,
+            submission=submission,
+            test_count=test_count,
+            success_count=success_count,
+            first_error=first_error,
+            first_failure=first_failure,
+        )
+    finally:
+        container.remove(force=True)
