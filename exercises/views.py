@@ -87,7 +87,7 @@ def view_results(request, number):
 @login_required
 def download_public_file(request, resource_id):
     resource = ExerciseResource.objects.get(pk=resource_id)
-    if resource.exercise.released():
+    if resource.exercise.released() or request.user.is_staff:
         return sendfile(request, resource.file.path, attachment=True)
     else:
         return redirect("home")
