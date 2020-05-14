@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scaie=1, shrink-to-fit=no" />
+        <title>Programmieren fuer Sozialwissenschaftler*innen</title>
+        <link rel="stylesheet" type="text/css" href="{% static "exercises/css/bootstrap/css/bootstrap.min.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "exercises/css/base.css" %}">
+    </head>
+
+<body>
+    <nav class="bg-dark">
+        <div class="container">
+            <h1><a id="title" href="/">Programmieren fuer Sozialwissenschaftler*innen</a></h1>
+        </div>
+    </nav>
+
+    <div class="container">
+        <br>
+        <div class="jumbotron">
+            <h1>{{ flatpage.title }}</h1>
+            {{ flatpage.content }}
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="{% static "exercises/js/fitty.min.js" %}"></script>
+<script>fitty('#title');</script>
+
+</html>

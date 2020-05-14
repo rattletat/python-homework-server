@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "exercises",
     "accounts",
+    "django.contrib.sites",
+    "django.contrib.flatpages",
     "django_rq",
 ]
 
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
 ]
 
 ROOT_URLCONF = "testserver.urls"
@@ -59,7 +62,7 @@ ROOT_URLCONF = "testserver.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -159,3 +162,6 @@ RQ_SHOW_ADMIN_LINK = True
 if DEBUG:
     for queueConfig in RQ_QUEUES.values():
         queueConfig["ASYNC"] = False
+
+# For DJango flatpages
+SITE_ID = 1
