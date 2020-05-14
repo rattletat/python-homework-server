@@ -30,6 +30,7 @@ else:
     SECRET_KEY = "insecure-key-for-dev"
     ALLOWED_HOSTS = ["*"]
 
+DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -164,4 +165,4 @@ if DEBUG:
         queueConfig["ASYNC"] = False
 
 # For DJango flatpages
-SITE_ID = 2
+SITE_ID = 1
