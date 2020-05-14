@@ -164,4 +164,4 @@ if DEBUG:
         queueConfig["ASYNC"] = False
 
 # For DJango flatpages
-SITE_ID = 1
+SITE_ID = 2
