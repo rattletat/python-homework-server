@@ -17,7 +17,10 @@ def generate_sha1(file):
 
 def get_submission_path(obj, _):
     return os.path.join(
-        "submissions", str(obj.user.uid), str(obj.exercise.number), f"{obj.uploaded}.py"
+        "submissions",
+        str(obj.user.uid),
+        str(obj.exercise.number),
+        f"{obj.uploaded}.py",
     )
 
 
@@ -27,3 +30,7 @@ def get_description_path(obj, _):
 
 def get_tests_path(obj, _=None):
     return os.path.join("exercises", str(obj.number), "tests.py")
+
+
+def get_resources_path(obj, filename):
+    return os.path.join("exercises", str(obj.exercise.number), "rsc", filename)

@@ -8,6 +8,7 @@
     <a href="{% url "exercises:view_exercise" exercise.number %}" class="btn btn-primary btn-sm">Zurück zur Aufgabe</a>
     <a href="{{ request.path }}" class="btn btn-dark btn-sm">Aktualisieren</a>
 </div>
+<br>
 {% endblock %}
 
 {% block B %} 
@@ -20,39 +21,41 @@ Beachte, dass die Abgaben manuell und automatisiert auf bloßes Abklappern der T
 
 {% block D %}
 {% if tests|length >= 1 %}
-<table class="table table-hover table-responsive" id="exercises">
-    <thead class="thead-dark">
-        <tr align="center" id="table-header">
-            <th scope="col">Zeitpunkt</th>
-            <th scope="col">Datum</th>
-            <th scope="col">Tests</th>
-            <th scope="col">Erfolgreich</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for test in tests %}
-        <tr class="table-secondary" align="center">
-            <td>{{ test.processed|time:"H:i" }}</td>
-            <td>{{ test.processed|date:"d. M Y" }}</td>
-            <td>{{ test.test_count }}</td>
-            <td>{{ test.success_count }}</td>
-            </td>
-        </tr>
-        {% if test.first_error %}
-        <tr class="table-danger" align="left" style="font-family:monospace;">
-            <td class="text-danger"> Error: </td>
-            <td colspan="5" align="left">{{ test.first_error|beautify_error|linebreaksbr }}</td>
-        </tr>
-        {% endif %}
-        {% if test.first_failure %}
-        <tr class="table-danger" align="left" style="font-family:monospace;">
-            <td class="text-danger"> Failure: </td>
-            <td colspan="5" align="left">{{ test.first_failure|beautify_error|linebreaksbr }}</td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-    </tbody>
-</table>
+<div align="center">
+    <table class="table table-hover table-responsive" id="exercises">
+        <thead class="thead-dark">
+            <tr align="center" id="table-header">
+                <th scope="col">Zeitpunkt</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Tests</th>
+                <th scope="col">Erfolgreich</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for test in tests %}
+            <tr class="table-secondary" align="center">
+                <td>{{ test.processed|time:"H:i" }}</td>
+                <td>{{ test.processed|date:"d. M Y" }}</td>
+                <td>{{ test.test_count }}</td>
+                <td>{{ test.success_count }}</td>
+                </td>
+            </tr>
+            {% if test.first_error %}
+            <tr class="table-danger" align="left" style="font-family:monospace;">
+                <td class="text-danger"> Error: </td>
+                <td colspan="5" align="left">{{ test.first_error|beautify_error|linebreaksbr }}</td>
+            </tr>
+            {% endif %}
+            {% if test.first_failure %}
+            <tr class="table-danger" align="left" style="font-family:monospace;">
+                <td class="text-danger"> Failure: </td>
+                <td colspan="5" align="left">{{ test.first_failure|beautify_error|linebreaksbr }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% else %}
 <h4>Noch keine Ergebnisse!</h4>
 <h5 style="color:secondary">Wenn du kürzlich etwas hochgeladen hast, musst du eventuell etwas warten und aktualisieren.

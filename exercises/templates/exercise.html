@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load markdown_extras %}
+{% load display_file %}
 
 {% block header%}{{ exercise.short_name }}{% endblock %}
 
@@ -29,8 +30,8 @@
             {% endif %}
     </tbody>
 </table>
-<br>
 {% if exercise.released and not exercise.expired and user.is_authenticated %}
+<br>
 <form action="{% url "exercises:view_exercise" exercise.number %}" method="POST" enctype="multipart/form-data"
     align="center">
     {% csrf_token %}
@@ -43,6 +44,7 @@
     <a href="{% url "exercises:view_results" exercise.number %}"><button type="button" style="width:auto" class="form-control btn btn-primary btn-sm">Ergebnisse</button></a>
     <button type="submit" style="width:auto" class="form-control btn btn-dark btn-sm">Abschicken</button>
 </form>
+<br>
 {% endif %}
 {% endblock %}
 
@@ -50,4 +52,22 @@
 <span id="id_description">
     {{ exercise.description.path | mdfile2html | safe }}
 </span>
+{% endblock %}
+
+{% block C %}
+{% if resources and user.is_authenticated %}
+<div align="center">
+<ul class="list-group w-50">
+    {% for resource in resources %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ resource.file | basename }}
+        <a href="{% url "exercises:download_public_file" resource.pk %}">
+            <button class="btn btn-outline-primary mr-3">Download</button>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+</div>
+<br>
+{% endif %}
 {% endblock %}

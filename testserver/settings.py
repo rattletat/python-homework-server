@@ -134,6 +134,14 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "files")
 MEDIA_URL = "/files/"
 
+if DEBUG:
+    SENDFILE_BACKEND = "sendfile.backends.development"
+else:
+    SENDFILE_BACKEND = "sendfile.backends.nginx"
+
+SENDFILE_ROOT = os.path.join(BASE_DIR, "files", "exercises")
+SENDFILE_URL = '/exercises'
+
 EMAIL_HOST = "posteo.de"
 EMAIL_HOST_USER = "michael.brauweiler@posteo.net"
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")

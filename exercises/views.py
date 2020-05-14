@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from exercises.models import Exercise, Submission
+from exercises.models import Exercise, Submission, ExerciseResource
 from exercises.forms import SubmissionForm
 from accounts.forms import LoginForm
 from exercises.tasks import compute_test_result
 from exercises.queries import get_user_test_results, get_user_test_statistics
 from django.utils.html import format_html
+from sendfile import sendfile
+
 import django_rq
 
 UPLOAD_SUCCESS = "Abgabe erfolgreich hochgeladen! Das Ergebnis müsste bald in <a href='{}'>deinen Ergebnissen</a> auftauchen!"
@@ -18,9 +20,19 @@ def home_page(request):
     context = {"exercises": exercises, "login": login}
     if request.user.is_authenticated:
         for exercise in exercises:
-            exercise.statistics = get_user_test_statistics(request.user, exercise)
-        context['max_points'] = sum(exercise.statistics["test_count"] for exercise in exercises if exercise.relevant)
-        context['user_points'] = sum(exercise.statistics["success_count"] for exercise in exercises if exercise.relevant)
+            exercise.statistics = get_user_test_statistics(
+                request.user, exercise
+            )
+        context["max_points"] = sum(
+            exercise.statistics["test_count"]
+            for exercise in exercises
+            if exercise.relevant
+        )
+        context["user_points"] = sum(
+            exercise.statistics["success_count"]
+            for exercise in exercises
+            if exercise.relevant
+        )
     return render(request, "home.html", context)
 
 
@@ -53,9 +65,12 @@ def view_exercise(request, number):
         "exercise": exercise,
         "form": SubmissionForm(),
         "login": login,
+        "resources": ExerciseResource.objects.filter(exercise=exercise),
     }
     if request.user.is_authenticated:
-        context["statistics"] = get_user_test_statistics(request.user, exercise)
+        context["statistics"] = get_user_test_statistics(
+            request.user, exercise
+        )
 
     return render(request, "exercise.html", context)
 
@@ -67,3 +82,12 @@ def view_results(request, number):
 
     context = {"exercise": exercise, "tests": tests}
     return render(request, "result.html", context)
+
+
+@login_required
+def download_public_file(request, resource_id):
+    resource = ExerciseResource.objects.get(pk=resource_id)
+    if resource.exercise.released():
+        return sendfile(request, resource.file.path, attachment=True)
+    else:
+        return redirect("home")
