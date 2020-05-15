@@ -15,7 +15,7 @@ from exercises.config import (
 )
 from exercises.models import TestResult, ExerciseResource
 
-TIMEOUT_ERROR = "TimeoutError: Dein Programm hat zu lange gebraucht!"
+TIMEOUT_ERROR = "Dein Programm hat zu lange gebraucht!"
 
 
 def compute_test_result(submission):
