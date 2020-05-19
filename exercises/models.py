@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 import os
 from django.urls import reverse
@@ -21,10 +22,7 @@ FILE_MAX_SIZE = 5000
 
 class Exercise(models.Model):
     number = models.PositiveSmallIntegerField(
-        primary_key=True,
-        default=None,
-        editable=False,
-        validators=[MinValueValidator(1)],
+        primary_key=True, default=None, editable=False, validators=[MinValueValidator(1)],
     )
     short_name = models.CharField(max_length=50, null=True)
     release = models.DateTimeField(null=True, default=None)
@@ -34,11 +32,7 @@ class Exercise(models.Model):
         upload_to=get_description_path,
         validators=[
             FileValidator(
-                allowed_mimetypes=[
-                    "text/markdown",
-                    "text/plain",
-                    "text/x-python",
-                ],
+                allowed_mimetypes=["text/markdown", "text/plain", "text/x-python"],
                 allowed_extensions=["md"],
             ),
         ],
@@ -53,9 +47,7 @@ class Exercise(models.Model):
             ),
         ],
     )
-    max_tests = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1)]
-    )
+    max_tests = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     relevant = models.BooleanField("Fließt in die Wertung ein.", default=True)
 
     def get_absolute_url(self):
@@ -84,8 +76,7 @@ class Exercise(models.Model):
 
         if self.release and self.deadline and self.release > self.deadline:
             raise ValidationError(
-                "Der Startzeitpunkt muss vor der Deadline liegen!",
-                code="invalid_date",
+                "Der Startzeitpunkt muss vor der Deadline liegen!", code="invalid_date",
             )
 
     class Meta:
@@ -93,14 +84,9 @@ class Exercise(models.Model):
 
 
 class ExerciseResource(models.Model):
-    exercise = models.ForeignKey(
-        Exercise, on_delete=models.PROTECT, editable=False
-    )
+    exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT, editable=False)
     file = models.FileField(
-        null=True,
-        default=None,
-        storage=OverwriteStorage(),
-        upload_to=get_resources_path,
+        null=True, default=None, storage=OverwriteStorage(), upload_to=get_resources_path,
     )
 
     def clean(self):
@@ -117,9 +103,7 @@ class ExerciseResource(models.Model):
 
 class Submission(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True, unique=True)
-    exercise = models.ForeignKey(
-        Exercise, on_delete=models.PROTECT, editable=False
-    )
+    exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT, editable=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, editable=False
     )
@@ -137,7 +121,10 @@ class Submission(models.Model):
     )
 
     def __str__(self):
-        return f"Submission on Exercise {self.exercise.number} by {self.user}"
+        try:
+            return f"Submission on Exercise {self.exercise.number} by {self.user}, Punkte: {self.testresult}"
+        except ObjectDoesNotExist:
+            return f"Submission on Exercise {self.exercise.number} by {self.user}"
 
     class Meta:
         unique_together = (
@@ -148,17 +135,17 @@ class Submission(models.Model):
 
 class TestResult(models.Model):
     submission = models.OneToOneField(
-        Submission, on_delete=models.CASCADE, editable=False
+        Submission, on_delete=models.CASCADE, editable=False,
     )
     processed = models.DateTimeField(auto_now_add=True, unique=True)
     job_id = models.CharField(max_length=128, editable=False)
     test_count = models.IntegerField(editable=False)
     success_count = models.IntegerField(editable=False)
-    first_error = models.TextField(null=True, blank=True)
-    first_failure = models.TextField(null=True, blank=True)
+    first_error = models.TextField(null=True, blank=True, editable=False)
+    first_failure = models.TextField(null=True, blank=True, editable=False)
 
     class Meta:
         ordering = ("-processed",)
 
     def __str__(self):
-        return f"TestResult ({self.success_count}/{self.test_count}) of {self.submission}"
+        return f"{self.success_count}/{self.test_count}"

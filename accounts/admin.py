@@ -11,6 +11,8 @@ class SubmissionInline(admin.StackedInline):
 
 
 class UserAdmin(admin.ModelAdmin):
+    fields = ("last_login", "email", "identifier")
+    readonly_fields = ["last_login"]
     inlines = [
         SubmissionInline,
     ]
