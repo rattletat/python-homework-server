@@ -105,7 +105,7 @@ class Submission(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True, unique=True)
     exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT, editable=False)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, editable=False
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False
     )
     file_hash = models.CharField(max_length=40, editable=False)
     file = models.FileField(
