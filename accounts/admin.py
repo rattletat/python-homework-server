@@ -8,6 +8,7 @@ class SubmissionInline(admin.StackedInline):
     model = Submission
     show_change_link = True
     readonly_fields = ("file", "exercise", "uploaded")
+    ordering = ("-uploaded",)
 
 
 class UserAdmin(admin.ModelAdmin):
