@@ -13,7 +13,8 @@ from exercises.config import (
     DOCKER_SETUP_OPTIONS,
     DOCKER_TIMEOUT,
 )
-from exercises.models import TestResult, ExerciseResource
+
+from .models import ExerciseResource, TestResult
 
 TIMEOUT_ERROR = "Dein Programm hat zu lange gebraucht!"
 

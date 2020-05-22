@@ -1,5 +1,6 @@
 from django.urls import path
-from exercises import views
+
+from . import views
 
 app_name = "exercises"
 urlpatterns = [

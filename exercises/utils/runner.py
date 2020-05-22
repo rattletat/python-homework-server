@@ -13,9 +13,9 @@ First Error
 First Failure
 <Separator>
 """
-import unittest
-import traceback
 import sys
+import traceback
+import unittest
 
 
 def main():
@@ -36,13 +36,17 @@ def main():
         success_count = test_count - len(result.errors) - len(result.failures)
         try:
             first_error = result.errors[0]
-            error = str(first_error[0]) + '\n' + str(first_error[1])
+            error1 = first_error[0]
+            error2 = first_error[1]
+            error = f"{error1}\n{error2}"
         except IndexError:
             error = ""
 
         try:
             first_failure = result.failures[0]
-            failure = str(first_failure[0]) + '\n' + str(first_failure[1])
+            failure1 = first_failure[0]
+            failure2 = first_failure[1]
+            failure = f"{failure1}\n{failure2}"
         except IndexError:
             failure = ""
 

@@ -1,6 +1,7 @@
-from django.urls import path
-from accounts.views import send_login_email, login
 from django.contrib.auth.views import LogoutView
+from django.urls import path
+
+from accounts.views import login, send_login_email
 
 app_name = 'accounts'
 urlpatterns = [

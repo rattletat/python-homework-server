@@ -1,11 +1,13 @@
-from django.shortcuts import redirect, render
-from django.contrib import auth, messages
 from smtplib import SMTPResponseException
 
-# from django.conf import settings
-from accounts.forms import LoginForm
+from django.contrib import auth, messages
+from django.shortcuts import redirect, render
+
 from exercises.models import Exercise
-from accounts.utils import send_email
+
+# from django.conf import settings
+from .forms import LoginForm
+from .utils import send_email
 
 MAIL_FAILURE = "Ein unerwarteter Fehler beim Absenden der Email ist aufgetreten."
 MAIL_SUCCESS = "Dein Login Link ist soeben in deinem Email Postfach angekommen."

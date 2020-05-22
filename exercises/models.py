@@ -1,20 +1,20 @@
-from django.conf import settings
-from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
 import os
+
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.validators import MinValueValidator
+from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
-from exercises.helper import (
+from .helper import (
     get_description_path,
+    get_resources_path,
     get_submission_path,
     get_tests_path,
-    get_resources_path,
 )
-from exercises.storage import OverwriteStorage
-from exercises.validators import FileValidator
+from .storage import OverwriteStorage
+from .validators import FileValidator
 
 FILE_MIN_SIZE = 30
 FILE_MAX_SIZE = 5000
@@ -22,7 +22,7 @@ FILE_MAX_SIZE = 5000
 
 class Exercise(models.Model):
     number = models.PositiveSmallIntegerField(
-        primary_key=True, default=None, editable=False, validators=[MinValueValidator(1)],
+        primary_key=True, validators=[MinValueValidator(1)],
     )
     short_name = models.CharField(max_length=50, null=True)
     release = models.DateTimeField(null=True, default=None)
@@ -42,8 +42,7 @@ class Exercise(models.Model):
         upload_to=get_tests_path,
         validators=[
             FileValidator(
-                allowed_mimetypes=["text/python", "text/x-python"],
-                allowed_extensions=["py"],
+                allowed_mimetypes=["text/python", "text/x-python"], allowed_extensions=["py"],
             ),
         ],
     )
@@ -84,7 +83,7 @@ class Exercise(models.Model):
 
 
 class ExerciseResource(models.Model):
-    exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT, editable=False)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, editable=False)
     file = models.FileField(
         null=True, default=None, storage=OverwriteStorage(), upload_to=get_resources_path,
     )
@@ -104,9 +103,7 @@ class ExerciseResource(models.Model):
 class Submission(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True, unique=True)
     exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT, editable=False)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False)
     file_hash = models.CharField(max_length=40, editable=False)
     file = models.FileField(
         upload_to=get_submission_path,
@@ -134,9 +131,7 @@ class Submission(models.Model):
 
 
 class TestResult(models.Model):
-    submission = models.OneToOneField(
-        Submission, on_delete=models.CASCADE, editable=False,
-    )
+    submission = models.OneToOneField(Submission, on_delete=models.CASCADE, editable=False,)
     processed = models.DateTimeField(auto_now_add=True, unique=True)
     job_id = models.CharField(max_length=128, editable=False)
     test_count = models.IntegerField(editable=False)

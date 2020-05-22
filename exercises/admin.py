@@ -1,11 +1,12 @@
-from django.contrib import admin
-from django.utils.html import format_html, format_html_join
-from django.http import HttpResponse
-from django.contrib.admin.views.decorators import staff_member_required
-from django.utils.decorators import method_decorator
-from django.shortcuts import reverse
 from django.conf.urls import url
-from .models import Exercise, Submission, TestResult, ExerciseResource
+from django.contrib import admin
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponse
+from django.shortcuts import reverse
+from django.utils.decorators import method_decorator
+from django.utils.html import format_html, format_html_join
+
+from .models import Exercise, ExerciseResource, Submission, TestResult
 
 
 class TestResultInline(admin.StackedInline):
@@ -41,7 +42,9 @@ class SubmissionAdmin(admin.ModelAdmin):
         if obj.file:
             return format_html(
                 '<a href="{}">Download</a>',
-                reverse("admin:exercises_submission_download-submission", args=[obj.pk],),
+                reverse(
+                    "admin:exercises_submission_download-submission", args=[obj.pk],
+                ),
             )
         else:
             return "Noch keine Datei hochgeladen!"
@@ -69,7 +72,6 @@ class ExerciseAdmin(admin.ModelAdmin):
         "description_link",
         "tests_link",
         "resources_link",
-        "number",
     )
     fields = [field.name for field in Exercise._meta.fields] + [
         "description_link",

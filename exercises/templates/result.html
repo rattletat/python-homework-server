@@ -11,9 +11,9 @@
 <br>
 {% endblock %}
 
-{% block B %} 
-Hier werden all deine Ergebnisse angezeigt. 
-Falls vorhanden werden jeweils ein Error (syntaktischer Fehler, Indexfehler etc.) und ein Failure (funktionaler Fehler wegen falschem Output) angezeigt. 
+{% block B %}
+Hier werden deine letzten 10 Ergebnisse angezeigt.
+Falls vorhanden werden jeweils ein Error (syntaktischer Fehler, Indexfehler etc.) und ein Failure (funktionaler Fehler wegen falschem Output) angezeigt.
 <br>
 <br>
 Beachte, dass die Abgaben manuell und automatisiert auf bloßes Abklappern der Test-Cases und Plagiate durchsucht werden. Neue Kommentare / Umbenennen von Variablen / Umstellen des Programmiercodes reicht im Allgemeinen nicht aus.
@@ -32,7 +32,7 @@ Beachte, dass die Abgaben manuell und automatisiert auf bloßes Abklappern der T
             </tr>
         </thead>
         <tbody>
-            {% for test in tests %}
+            {% for test in tests|slice:":10" %}
             <tr class="table-secondary" align="center">
                 <td>{{ test.processed|time:"H:i" }}</td>
                 <td>{{ test.processed|date:"d. M Y" }}</td>
