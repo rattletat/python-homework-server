@@ -118,10 +118,11 @@ class Submission(models.Model):
     )
 
     def __str__(self):
+        time = self.uploaded.strftime("%d.%m.%Y %H:%M")
         try:
-            return f"Submission on Exercise {self.exercise.number} by {self.user}, Punkte: {self.testresult}"
+            return f"{time}: Submission for Exercise {self.exercise.number} by {self.user}, ({self.testresult})"
         except ObjectDoesNotExist:
-            return f"Submission on Exercise {self.exercise.number} by {self.user}"
+            return f"{time}: Submission for Exercise {self.exercise.number} by {self.user}"
 
     class Meta:
         unique_together = (
