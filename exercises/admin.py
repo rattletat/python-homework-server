@@ -19,6 +19,13 @@ class TestResultInline(admin.StackedInline):
 
 class SubmissionAdmin(admin.ModelAdmin):
     inlines = [TestResultInline]
+    list_display = (
+        "uploaded",
+        "exercise",
+        "success_count",
+        "test_count",
+        "user",
+    )
     readonly_fields = (
         "uploaded",
         "exercise",
@@ -26,6 +33,12 @@ class SubmissionAdmin(admin.ModelAdmin):
         "file",
         "submission_link",
     )
+
+    def success_count(self, obj):
+        return obj.testresult.success_count
+
+    def test_count(self, obj):
+        return obj.testresult.test_count
 
     def get_urls(self):
         urls = super(SubmissionAdmin, self).get_urls()

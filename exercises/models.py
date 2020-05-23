@@ -42,7 +42,8 @@ class Exercise(models.Model):
         upload_to=get_tests_path,
         validators=[
             FileValidator(
-                allowed_mimetypes=["text/python", "text/x-python"], allowed_extensions=["py"],
+                allowed_mimetypes=["text/python", "text/x-python"],
+                allowed_extensions=["py"],
             ),
         ],
     )
@@ -75,7 +76,8 @@ class Exercise(models.Model):
 
         if self.release and self.deadline and self.release > self.deadline:
             raise ValidationError(
-                "Der Startzeitpunkt muss vor der Deadline liegen!", code="invalid_date",
+                "Der Startzeitpunkt muss vor der Deadline liegen!",
+                code="invalid_date",
             )
 
     class Meta:
@@ -85,7 +87,10 @@ class Exercise(models.Model):
 class ExerciseResource(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, editable=False)
     file = models.FileField(
-        null=True, default=None, storage=OverwriteStorage(), upload_to=get_resources_path,
+        null=True,
+        default=None,
+        storage=OverwriteStorage(),
+        upload_to=get_resources_path,
     )
 
     def clean(self):
@@ -103,7 +108,9 @@ class ExerciseResource(models.Model):
 class Submission(models.Model):
     uploaded = models.DateTimeField(auto_now_add=True, unique=True)
     exercise = models.ForeignKey(Exercise, on_delete=models.PROTECT, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False
+    )
     file_hash = models.CharField(max_length=40, editable=False)
     file = models.FileField(
         upload_to=get_submission_path,
@@ -132,7 +139,9 @@ class Submission(models.Model):
 
 
 class TestResult(models.Model):
-    submission = models.OneToOneField(Submission, on_delete=models.CASCADE, editable=False,)
+    submission = models.OneToOneField(
+        Submission, on_delete=models.CASCADE, editable=False,
+    )
     processed = models.DateTimeField(auto_now_add=True, unique=True)
     job_id = models.CharField(max_length=128, editable=False)
     test_count = models.IntegerField(editable=False)
