@@ -11,7 +11,6 @@ from exercises.config import (
     DOCKER_RUNNER_PATH,
     DOCKER_SECURITY_OPTIONS,
     DOCKER_SETUP_OPTIONS,
-    DOCKER_TIMEOUT,
 )
 
 from .models import ExerciseResource, TestResult
@@ -50,7 +49,7 @@ def compute_test_result(submission):
             volumes=volumes,
             detach=True,
         )
-        container.wait(timeout=DOCKER_TIMEOUT)
+        container.wait(timeout=submission.exercise.timeout)
         output = container.logs()
         results = force_str(output).split(sep)
         container.remove(force=True)

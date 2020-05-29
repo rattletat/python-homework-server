@@ -2,7 +2,7 @@ import os
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
@@ -49,6 +49,14 @@ class Exercise(models.Model):
     )
     max_tests = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
     relevant = models.BooleanField("Fließt in die Wertung ein.", default=True)
+    max_upload_size = models.PositiveIntegerField(
+        "Maximale Upload Größe in Bytes", default=5000
+    )
+    timeout = models.PositiveSmallIntegerField(
+        "Maximale Testlaufzeit in Sekunden",
+        default=10,
+        validators=[MaxValueValidator(30)],
+    )
 
     def get_absolute_url(self):
         return reverse("exercises:view_exercise", args=[self.number])
@@ -112,17 +120,18 @@ class Submission(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False
     )
     file_hash = models.CharField(max_length=40, editable=False)
-    file = models.FileField(
-        upload_to=get_submission_path,
-        validators=[
-            FileValidator(
-                min_size=FILE_MIN_SIZE,
-                max_size=FILE_MAX_SIZE,
-                allowed_mimetypes=["text/x-python", "text/plain"],
-                allowed_extensions=["py"],
-            ),
-        ],
-    )
+    file = models.FileField(upload_to=get_submission_path,)
+
+    def clean(self):
+        super().clean()
+
+        validator = FileValidator(
+            min_size=FILE_MIN_SIZE,
+            max_size=self.exercise.max_upload_size,
+            allowed_mimetypes=["text/x-python", "text/plain"],
+            allowed_extensions=["py"],
+        )
+        validator(self.file)
 
     def __str__(self):
         time = self.uploaded.strftime("%d.%m.%Y %H:%M")

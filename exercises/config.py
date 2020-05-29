@@ -4,7 +4,6 @@ import os
 
 DOCKER_IMAGE = "python:3"
 DOCKER_WORKING_DIR = "/app"
-DOCKER_TIMEOUT = 5  # Needs to be less than Redis Timeout!
 DOCKER_SETUP_OPTIONS = {
     "working_dir": DOCKER_WORKING_DIR,
 }
