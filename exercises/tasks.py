@@ -16,6 +16,11 @@ from exercises.config import (
 from .models import ExerciseResource, TestResult
 
 TIMEOUT_ERROR = "Dein Programm hat zu lange gebraucht!"
+NO_OUTPUT_ERROR = (
+    "Dein Programm ist unerwartet beendet.\n"
+    + "Bitte entferne die sys.exit().\n"
+    + "Wenn das nicht hilft, kontaktiere den Support."
+)
 UNKNOWN_ERROR = (
     "Unerwarteter Fehler.\n"
     "Versuch bitte die print statements wegzulassen!\n"
@@ -77,6 +82,12 @@ def compute_test_result(submission):
             test_count = 1
             success_count = 0
             first_error = UNKNOWN_ERROR
+            first_failure = ""
+
+        if not results or not any(results):
+            test_count = 1
+            success_count = 0
+            first_error = NO_OUTPUT_ERROR
             first_failure = ""
 
         TestResult.objects.create(
