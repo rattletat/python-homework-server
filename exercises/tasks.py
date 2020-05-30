@@ -63,10 +63,16 @@ def compute_test_result(submission):
         )
     else:
 
-        test_count = results[1]
-        success_count = results[2]
-        first_error = results[3]
-        first_failure = results[4]
+        if len(results) == 4:
+            test_count = results[1]
+            success_count = results[2]
+            first_error = results[3]
+            first_failure = results[4]
+        else:
+            test_count = 1
+            success_count = 0
+            first_error = "\n".join(results)
+            first_failure = ""
 
         TestResult.objects.create(
             job_id=job.id,
