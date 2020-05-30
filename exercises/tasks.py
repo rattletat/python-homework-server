@@ -63,12 +63,12 @@ def compute_test_result(submission):
         )
     else:
 
-        if len(results) == 4:
+        try:
             test_count = results[1]
             success_count = results[2]
             first_error = results[3]
             first_failure = results[4]
-        else:
+        except IndexError:
             test_count = 1
             success_count = 0
             first_error = "\n".join(results)
