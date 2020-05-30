@@ -1,22 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block sub_header %}Übungsseite{% endblock %}
 
 {% block B %}
-Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozialwissenschaftler*innen im Sommersemester 2020!
-  <br><br>
-  Auf dieser Seite findet ihr die Aufgabenbeschreibungen zu allen Übungsaufgaben. Zusätzlich könnt ihr hier eure bearbeiteten Aufgaben hochladen und automatisch testen lassen. Um Aufgaben abzugeben müsst ihr euch vorher mit eurer Email-Adresse anmelden. <br>
-  <i><b>Wichtig:</b> TUM Studierende geben zusätzlich ihre TUM Matrikelnummer an.</i>
-  <br><br>
-  In der untenstehenden Tabelle sind alle Programmierübungen aufgelistet. Die blaumarkierten Zeilen stellen dabei die derzeitig aktiven Aufgaben da, die ihr bearbeiten sollt.
+Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozialwissenschaftler*innen im Sommersemester
+2020!
+<br><br>
+Auf dieser Seite findet ihr die Aufgabenbeschreibungen zu allen Übungsaufgaben. Zusätzlich könnt ihr hier eure
+bearbeiteten Aufgaben hochladen und automatisch testen lassen. Um Aufgaben abzugeben müsst ihr euch vorher mit eurer
+Email-Adresse anmelden. <br>
+<i><b>Wichtig:</b> TUM Studierende geben zusätzlich ihre TUM Matrikelnummer an.</i>
+<br><br>
+In der untenstehenden Tabelle sind alle Programmierübungen aufgelistet. Die blaumarkierten Zeilen stellen dabei die
+derzeitig aktiven Aufgaben da, die ihr bearbeiten sollt.
 {% endblock %}
 
 {% block C %}
-  {% if exercises|length >= 1 %}
-    <h4>Programmieraufgaben</h4>
-  {% else %}
-    <h4>Keine Programmieraufgaben!</h4>
-  {% endif %}
+{% if exercises|length >= 1 %}
+<h4>Programmieraufgaben</h4>
+{% else %}
+<h4>Keine Programmieraufgaben!</h4>
+{% endif %}
 {% endblock %}
 
 {% block D %}
@@ -86,6 +91,13 @@ Willkommen auf der offiziellen Übungseite der Vorlesung Programmieren für Sozi
 {% block E %}
 {% if user.is_authenticated and exercises|length >= 1 %}
 <h5 class="text-secondary">Bisheriger Punktestand: {{ user_points }} P. von insgesamt {{ max_points }} P.</h5>
+
+<svg id="graph" width="100%" height="300px" onload="drawGraph('{% url "exercises:statistics" %}',{{ user_points }})">
+</svg>
 {% endif %}
 {% endblock %}
 
+{% block script %}
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script type="text/javascript" src="{% static "exercises/js/graph.js" %}"></script>
+{% endblock %}

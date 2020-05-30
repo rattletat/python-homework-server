@@ -11,4 +11,5 @@ urlpatterns = [
         views.download_public_file,
         name="download_public_file",
     ),
+    path("api/statistics", views.api_statistics, name="statistics"),
 ]

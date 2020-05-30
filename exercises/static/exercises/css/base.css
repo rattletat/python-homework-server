@@ -80,12 +80,12 @@ nav h1 a[href] {
 }
 
 /* Hide arrows from number field */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: 0; 
+    margin: 0;
 }
 
 .table > tbody > tr > td {
@@ -93,5 +93,5 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .inline-flex-parent {
-  display: inline-flex;
+    display: inline-flex;
 }

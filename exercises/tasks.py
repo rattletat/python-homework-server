@@ -73,6 +73,7 @@ def compute_test_result(submission):
         )
     else:
 
+        # TODO Why does sys.exit() produces no result?
         try:
             test_count = results[1]
             success_count = results[2]

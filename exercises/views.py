@@ -4,12 +4,17 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils.html import format_html
 from sendfile import sendfile
+from django.http import JsonResponse
 
 from accounts.forms import LoginForm
 
 from .forms import SubmissionForm
 from .models import Exercise, ExerciseResource, Submission
-from .queries import get_user_test_results, get_user_test_statistics
+from .queries import (
+    get_user_test_results,
+    get_user_test_statistics,
+    get_current_statistics,
+)
 from .tasks import compute_test_result
 
 UPLOAD_SUCCESS = "Abgabe erfolgreich hochgeladen! Das Ergebnis müsste bald in <a href='{}'>deinen Ergebnissen</a> auftauchen!"
@@ -23,10 +28,14 @@ def home_page(request):
         for exercise in exercises:
             exercise.statistics = get_user_test_statistics(request.user, exercise)
         context["max_points"] = sum(
-            exercise.statistics["test_count"] for exercise in exercises if exercise.relevant
+            exercise.statistics["test_count"]
+            for exercise in exercises
+            if exercise.relevant
         )
         context["user_points"] = sum(
-            exercise.statistics["success_count"] for exercise in exercises if exercise.relevant
+            exercise.statistics["success_count"]
+            for exercise in exercises
+            if exercise.relevant
         )
     return render(request, "home.html", context)
 
@@ -47,7 +56,9 @@ def view_exercise(request, number):
         if form.is_valid():
             form.save()
             django_rq.enqueue(compute_test_result, submission)
-            messages.success(request, format_html(UPLOAD_SUCCESS, exercise.get_result_url()))
+            messages.success(
+                request, format_html(UPLOAD_SUCCESS, exercise.get_result_url())
+            )
             return redirect(exercise)
         else:
             for error in form.errors.values():
@@ -82,3 +93,8 @@ def download_public_file(request, resource_id):
         return sendfile(request, resource.file.path, attachment=True)
     else:
         return redirect("home")
+
+
+@login_required
+def api_statistics(request):
+    return JsonResponse(get_current_statistics(), safe=False)
