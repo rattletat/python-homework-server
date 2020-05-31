@@ -11,9 +11,6 @@ Auf dieser Seite findet ihr die Aufgabenbeschreibungen zu allen Übungsaufgaben.
 bearbeiteten Aufgaben hochladen und automatisch testen lassen. Um Aufgaben abzugeben müsst ihr euch vorher mit eurer
 Email-Adresse anmelden. <br>
 <i><b>Wichtig:</b> TUM Studierende geben zusätzlich ihre TUM Matrikelnummer an.</i>
-<br><br>
-In der untenstehenden Tabelle sind alle Programmierübungen aufgelistet. Die blaumarkierten Zeilen stellen dabei die
-derzeitig aktiven Aufgaben da, die ihr bearbeiten sollt.
 {% endblock %}
 
 {% block C %}
@@ -92,7 +89,7 @@ derzeitig aktiven Aufgaben da, die ihr bearbeiten sollt.
 {% if user.is_authenticated and exercises|length >= 1 %}
 <h5 class="text-secondary">Bisheriger Punktestand: {{ user_points }} P. von insgesamt {{ max_points }} P.</h5>
 
-<svg id="graph" width="100%" height="300px" onload="drawGraph('{% url "exercises:statistics" %}',{{ user_points }})">
+<svg id="graph" width="100%" height="220px" onload="drawGraph('{% url "exercises:statistics" %}',{{ user_points }})">
 </svg>
 {% endif %}
 {% endblock %}
