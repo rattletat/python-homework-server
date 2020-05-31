@@ -34,6 +34,7 @@ def get_user_test_statistics(user, exercise):
 
 
 def get_current_statistics():
+    """ Returns all non-null scores anonymized. """
     results = Submission.objects.values("user", "exercise").annotate(
         rating=Max("testresult__success_count")
     )
