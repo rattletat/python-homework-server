@@ -9,7 +9,7 @@ DOCKER_SETUP_OPTIONS = {
 }
 DOCKER_SECURITY_OPTIONS = {
     "user": "1000:1000",
-    # "read_only": True,
+    "read_only": False,
     "network_disabled": True,
     "network_mode": "none",
     "mem_limit": "1g",
