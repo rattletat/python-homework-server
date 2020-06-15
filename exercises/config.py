@@ -8,7 +8,7 @@ DOCKER_SETUP_OPTIONS = {
     "working_dir": DOCKER_WORKING_DIR,
 }
 DOCKER_SECURITY_OPTIONS = {
-    "user": "1000:1000",
+    # "user": "1000:1000",
     "read_only": False,
     "network_disabled": True,
     "network_mode": "none",
