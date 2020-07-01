@@ -40,6 +40,6 @@ def get_current_statistics():
     )
     final_result = defaultdict(int)
     for result in results:
-        if result['rating']:
+        if result['rating'] and result['rating'] > 5:
             final_result[result['user']] += result['rating']
     return sorted(final_result.values())
