@@ -20,7 +20,7 @@ function drawGraph(data_url, user_points) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     data = d3.json(data_url).then(function (data) {
-        var n = d3.max(data)
+        var n = d3.max(data) * 1.05
         var scX = d3.scaleLinear().domain([1, n]).range([0, width])
 
         // Axis
@@ -37,7 +37,12 @@ function drawGraph(data_url, user_points) {
             .domain([0, d3.max(bins, d => d.length)])
             .range([height, 0]);
 
-        svg.append("g").call(d3.axisLeft(scY));
+        const yAxisTicks = scY.ticks()
+            .filter(tick => Number.isInteger(tick));
+        const yAxis = d3.axisLeft(scY)
+            .tickValues(yAxisTicks)
+            .tickFormat(d3.format('d'));
+        svg.append("g").call(yAxis);
 
         // Bars
         svg.selectAll("rect")
@@ -46,14 +51,14 @@ function drawGraph(data_url, user_points) {
             .append("rect")
             .attr("x", 1)
             .attr("y", 0)
-            .attr("transform", d => "translate(" + scX(d.x0) + "," + height + ")")
+            .attr("transform", d => "translate(" + (scX(d.x0) - (scX(d.x1) - scX(d.x0))/2) + "," + height + ")")
             .attr("width", d => scX(d.x1) - scX(d.x0))
             .style("fill", "grey")
             .transition()
             .duration(3000)
             .style("fill", "#0275d8")
             .attr("height", d => height - scY(d.length))
-            .attr("transform", d => "translate(" + scX(d.x0) + "," + (scY(d.length)) + ")")
+            .attr("transform", d => "translate(" + (scX(d.x0) - (scX(d.x1) - scX(d.x0))/2) + "," + (scY(d.length)) + ")")
 
         // Vertical Line
         svg
