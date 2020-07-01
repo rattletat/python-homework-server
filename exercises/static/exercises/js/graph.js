@@ -51,14 +51,14 @@ function drawGraph(data_url, user_points) {
             .append("rect")
             .attr("x", 1)
             .attr("y", 0)
-            .attr("transform", d => "translate(" + (scX(d.x0) - (scX(d.x1) - scX(d.x0))/2) + "," + height + ")")
+            .attr("transform", d => "translate(" + scX(d.x0) + "," + height + ")")
             .attr("width", d => scX(d.x1) - scX(d.x0))
             .style("fill", "grey")
             .transition()
             .duration(3000)
             .style("fill", "#0275d8")
             .attr("height", d => height - scY(d.length))
-            .attr("transform", d => "translate(" + (scX(d.x0) - (scX(d.x1) - scX(d.x0))/2) + "," + (scY(d.length)) + ")")
+            .attr("transform", d => "translate(" + scX(d.x0) + "," + (scY(d.length)) + ")")
 
         // Vertical Line
         svg
