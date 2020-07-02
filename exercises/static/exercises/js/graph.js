@@ -20,7 +20,7 @@ function drawGraph(data_url, user_points) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     data = d3.json(data_url).then(function (data) {
-        var n = d3.max(data) * 1.1
+        var n = d3.max(data) * 1.05
         var scX = d3.scaleLinear().domain([1, n]).range([0, width])
 
         // Axis
@@ -63,8 +63,8 @@ function drawGraph(data_url, user_points) {
         // Vertical Line
         svg
             .append("line")
-            .attr("x1", scX(user_points * 1.1))
-            .attr("x2", scX(user_points * 1.1))
+            .attr("x1", scX(user_points))
+            .attr("x2", scX(user_points))
             .attr("y1", 0)
             .attr("y2", height)
             .attr("stroke", "red")
