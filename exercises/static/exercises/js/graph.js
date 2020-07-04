@@ -89,6 +89,6 @@ function drawGraph(data_url, user_points) {
             .attr("font-family", "sans-serif")
             .attr("font-size", "12px")
             .attr("class", "y label")
-            .text("Studenten");
+            .text("Studierende");
     })
 }
