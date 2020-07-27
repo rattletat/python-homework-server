@@ -9,6 +9,31 @@ def get_user_test_results(user, exercise):
     )
 
 
+def convert_points_to_grade(points):
+    if 190 < points and points <= 200:
+        return 1.0
+    elif 180 < points and points <= 190:
+        return 1.3
+    elif 170 < points and points <= 180:
+        return 1.7
+    elif 160 < points and points <= 170:
+        return 2.0
+    elif 150 < points and points <= 160:
+        return 2.3
+    elif 140 < points and points <= 150:
+        return 2.7
+    elif 130 < points and points <= 140:
+        return 3.0
+    elif 120 < points and points <= 130:
+        return 3.3
+    elif 110 < points and points <= 120:
+        return 3.7
+    elif 100 < points and points <= 110:
+        return 4.0
+    else:
+        return 5.0
+
+
 def get_user_test_statistics(user, exercise):
     tests = get_user_test_results(user, exercise)
     if tests:
@@ -40,6 +65,6 @@ def get_current_statistics():
     )
     final_result = defaultdict(int)
     for result in results:
-        if result['rating'] and result['rating'] > 5:
-            final_result[result['user']] += result['rating']
+        if result["rating"] and result["rating"] > 5:
+            final_result[result["user"]] += result["rating"]
     return sorted(final_result.values())

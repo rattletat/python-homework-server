@@ -12,6 +12,7 @@ from .forms import SubmissionForm
 from .models import Exercise, ExerciseResource, Submission
 from .queries import (
     get_user_test_results,
+    convert_points_to_grade,
     get_user_test_statistics,
     get_current_statistics,
 )
@@ -37,6 +38,7 @@ def home_page(request):
             for exercise in exercises
             if exercise.relevant
         )
+        context["grade"] = convert_points_to_grade(context["user_points"])
     return render(request, "home.html", context)
 
 

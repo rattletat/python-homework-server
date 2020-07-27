@@ -87,7 +87,7 @@ Email-Adresse anmelden. <br>
 
 {% block E %}
 {% if user.is_authenticated and exercises|length >= 1 %}
-<h5 class="text-secondary">Bisheriger Punktestand: {{ user_points }} P. von insgesamt {{ max_points }} P.</h5>
+<h5 class="text-secondary">Bisheriger Punktestand: {{ user_points }} P. von insgesamt {{ max_points }} P. (Bisherige Note: {{ grade }})</h5>
 
 <svg id="graph" width="100%" height="220px" onload="drawGraph('{% url "exercises:statistics" %}',{{ user_points }})">
 </svg>
