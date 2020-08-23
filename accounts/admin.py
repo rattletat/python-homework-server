@@ -13,7 +13,7 @@ class SubmissionInline(admin.StackedInline):
 
 
 class UserAdmin(admin.ModelAdmin):
-    fields = ("last_login", "email", "identifier", "points", "grade")
+    fields = ("last_login", "email", "identifier")
     list_display = ("email", "identifier", "points", "grade")
     readonly_fields = ["last_login"]
     inlines = [
