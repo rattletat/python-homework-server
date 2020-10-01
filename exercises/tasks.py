@@ -67,7 +67,7 @@ def compute_test_result(submission):
         TestResult.objects.create(
             job_id=job.id,
             submission=submission,
-            test_count=1,
+            test_count=submission.exercise.max_tests,
             success_count=0,
             first_error=TIMEOUT_ERROR + "\n" + str(e),
         )
@@ -80,13 +80,13 @@ def compute_test_result(submission):
             first_error = results[3]
             first_failure = results[4]
         except IndexError:
-            test_count = 1
+            test_count = submission.exercise.max_tests
             success_count = 0
             first_error = UNKNOWN_ERROR
             first_failure = ""
 
         if not results or not any(results):
-            test_count = 1
+            test_count = submission.exercise.max_tests
             success_count = 0
             first_error = NO_OUTPUT_ERROR
             first_failure = ""
